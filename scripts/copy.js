@@ -51,7 +51,6 @@ export default async function copy() {
         JSON_SPACE_NUM,
       ),
     ),
-    copyFile('../LICENSE', 'build/LICENSE.txt'),
     copyFile('yarn.lock', 'build/yarn.lock'),
     copyDirectory('public', 'build/public'),
   ]);
