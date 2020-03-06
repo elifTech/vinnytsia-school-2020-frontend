@@ -1,1 +1,1 @@
-web: node ./build/server.js
+web: ls && node build/server.js
