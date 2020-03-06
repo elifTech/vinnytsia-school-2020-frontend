@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 import { name, version } from '../../package.json';
 import rootReducer from '../reducers';
 
@@ -12,6 +11,12 @@ export default function configureStore(initialState) {
   if (__DEV__) {
     // eslint-disable-next-line global-require
     const createLogger = require('./logger').default;
+    const {
+      composeWithDevTools,
+      // eslint-disable-next-line global-require
+    } = require('redux-devtools-extension/developmentOnly');
+
+    // eslint-disable-next-line global-require
     middleware.push(createLogger());
 
     // https://github.com/zalmoxisus/redux-devtools-extension#14-using-in-production
