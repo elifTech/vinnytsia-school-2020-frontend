@@ -1,1 +1,1 @@
-web: yarn serve
+web: node ./build/server.js
