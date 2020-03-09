@@ -1,4 +1,3 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 

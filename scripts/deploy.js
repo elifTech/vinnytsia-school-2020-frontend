@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import includes from 'lodash/includes';
 import path from 'path';
 import fetch from 'node-fetch';

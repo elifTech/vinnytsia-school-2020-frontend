@@ -1,6 +1,3 @@
-/* eslint-disable promise/prefer-await-to-then */
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/no-promise-in-callback */
 import browserSync from 'browser-sync';
 import express from 'express';
 import find from 'lodash/find';
@@ -140,13 +137,16 @@ async function start() {
   });
 
   let app;
-  server.use((request, response) => {
-    appPromise
-      .then(() => app.handle(request, response))
-      .catch(error => console.error(error));
+  server.use(async (request, response) => {
+    try {
+      await appPromise;
+      app.handle(request, response);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  function checkForUpdate(fromUpdate) {
+  async function checkForUpdate(fromUpdate) {
     const hmrPrefix = '[\u001B[35mHMR\u001B[0m] ';
     if (!app.hot) {
       throw new Error(`${hmrPrefix}Hot Module Replacement is disabled.`);
@@ -154,46 +154,44 @@ async function start() {
     if (app.hot.status() !== 'idle') {
       return Promise.resolve();
     }
-    return app.hot
-      .check(true)
-      .then(updatedModules => {
-        if (!updatedModules) {
-          if (fromUpdate) {
-            console.info(`${hmrPrefix}Update applied.`);
-          }
-          return;
+    try {
+      const updatedModules = await app.hot.check(true);
+      if (!updatedModules) {
+        if (fromUpdate) {
+          console.info(`${hmrPrefix}Update applied.`);
         }
-        if (updatedModules.length === 0) {
-          console.info(`${hmrPrefix}Nothing hot updated.`);
-        } else {
-          console.info(`${hmrPrefix}Updated modules:`);
-          forEach(updatedModules, moduleId =>
-            console.info(`${hmrPrefix} - ${moduleId}`),
-          );
-          checkForUpdate(true);
-        }
-      })
-      .catch(error => {
-        if (includes(['abort', 'fail'], app.hot.status())) {
-          console.warn(`${hmrPrefix}Cannot apply update.`);
-          delete require.cache[require.resolve('../build/server')];
-          // eslint-disable-next-line global-require, import/no-unresolved
-          app = require('../build/server').default;
-          console.warn(`${hmrPrefix}App has been reloaded.`);
-        } else {
-          console.warn(
-            `${hmrPrefix}Update failed: ${error.stack || error.message}`,
-          );
-        }
-      });
+        return Promise.resolve();
+      }
+      if (updatedModules.length === 0) {
+        console.info(`${hmrPrefix}Nothing hot updated.`);
+      } else {
+        console.info(`${hmrPrefix}Updated modules:`);
+        forEach(updatedModules, moduleId =>
+          console.info(`${hmrPrefix} - ${moduleId}`),
+        );
+        checkForUpdate(true);
+      }
+    } catch (error) {
+      if (includes(['abort', 'fail'], app.hot.status())) {
+        console.warn(`${hmrPrefix}Cannot apply update.`);
+        delete require.cache[require.resolve('../build/server')];
+        // eslint-disable-next-line global-require, import/no-unresolved
+        app = require('../build/server').default;
+        console.warn(`${hmrPrefix}App has been reloaded.`);
+      } else {
+        console.warn(
+          `${hmrPrefix}Update failed: ${error.stack || error.message}`,
+        );
+      }
+    }
+    return Promise.resolve();
   }
 
-  serverCompiler.watch(watchOptions, (error, stats) => {
+  serverCompiler.watch(watchOptions, async (error, stats) => {
     if (app && !error && !stats.hasErrors()) {
-      checkForUpdate().then(() => {
-        appPromiseIsResolved = true;
-        appPromiseResolve();
-      });
+      await checkForUpdate();
+      appPromiseIsResolved = true;
+      appPromiseResolve();
     }
   });
 

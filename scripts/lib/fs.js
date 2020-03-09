@@ -1,4 +1,3 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
 import fs from 'fs';
 import glob from 'glob';
 import map from 'lodash/map';

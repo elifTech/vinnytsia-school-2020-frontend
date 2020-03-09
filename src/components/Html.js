@@ -5,8 +5,6 @@ import serialize from 'serialize-javascript';
 import config from '../config';
 import Style from './Style';
 
-/* eslint-disable react/no-danger */
-
 function Html(props) {
   const { title, description, styles, scripts, app, children } = props;
   const appHtml = useMemo(() => ({ __html: children }), [children]);
@@ -41,12 +39,15 @@ function Html(props) {
         ))}
       </head>
       <body>
+        {/* eslint-disable-next-line react/no-danger */}
         <div dangerouslySetInnerHTML={appHtml} id="app" />
+        {/* eslint-disable-next-line react/no-danger */}
         <script dangerouslySetInnerHTML={serializedState} />
         {map(scripts, script => (
           <script key={script} src={script} />
         ))}
         {config.analytics.googleTrackingId && (
+          /* eslint-disable-next-line react/no-danger */
           <script dangerouslySetInnerHTML={ga} />
         )}
         {config.analytics.googleTrackingId && (

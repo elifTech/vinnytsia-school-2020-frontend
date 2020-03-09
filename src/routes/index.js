@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 const routes = [
   {
     action({ next }) {
@@ -39,6 +37,7 @@ const routes = [
 // The error page is available by permanent url for development mode
 if (__DEV__) {
   routes[1].children.unshift({
+    // eslint-disable-next-line global-require
     action: require('./error').default,
     path: '/error',
   });

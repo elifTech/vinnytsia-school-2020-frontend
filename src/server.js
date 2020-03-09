@@ -1,20 +1,16 @@
-/* eslint-disable complexity, react-perf/jsx-no-new-object-as-prop */
-/* eslint-disable promise/prefer-await-to-callbacks */
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import isomorphicCookie from 'isomorphic-cookie';
-import StyleContext from 'isomorphic-style-loader/StyleContext';
 import forEach from 'lodash/forEach';
 import nodeFetch from 'node-fetch';
 import path from 'path';
 import PrettyError from 'pretty-error';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import { Provider as ReduxProvider } from 'react-redux';
-import App from './components/App';
 import Html from './components/Html';
+import WrappedApp from './components/WrappedApp';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import router from './router';
@@ -63,13 +59,6 @@ app.use(compression());
 app.get('*', async (request, response, next) => {
   try {
     const css = new Set();
-
-    // Enables critical path CSS rendering
-    // https://github.com/kriasoft/isomorphic-style-loader
-    const insertCss = (...styles) => {
-      // eslint-disable-next-line no-underscore-dangle
-      forEach(styles, style => css.add(style._getCss()));
-    };
     const initialState = {};
 
     const store = configureStore(initialState, {
@@ -99,11 +88,14 @@ app.get('*', async (request, response, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <StyleContext.Provider value={{ insertCss }}>
-        <ReduxProvider store={context.store}>
-          <App context={context}>{route.component}</App>
-        </ReduxProvider>
-      </StyleContext.Provider>,
+      <WrappedApp
+        path={context.pathname}
+        query={context.query}
+        store={store}
+        token={context.token}
+      >
+        {route.component}
+      </WrappedApp>,
     );
     data.styles = [{ cssText: Array.from(css).join(''), id: 'css' }];
 

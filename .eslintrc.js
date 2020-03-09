@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 // ESLint configuration
 // http://eslint.org/docs/user-guide/configuring
 module.exports = {
@@ -14,12 +13,21 @@ module.exports = {
     'plugin:react/all',
     'plugin:react-perf/recommended',
     'plugin:lodash/recommended',
+    'plugin:eslint-comments/recommended',
     'prettier',
     'prettier/react',
   ],
   globals: {
     __DEV__: true,
   },
+  overrides: [
+    {
+      files: ['scripts/**/*'],
+      rules: {
+        'unicorn/no-process-exit': 'off',
+      },
+    },
+  ],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
@@ -35,6 +43,7 @@ module.exports = {
     'promise',
     'unicorn',
     'array-func',
+    'eslint-comments',
     'react',
     'react-perf',
     'react-hooks',

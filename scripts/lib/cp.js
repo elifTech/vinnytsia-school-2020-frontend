@@ -1,4 +1,3 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
 import cp from 'child_process';
 
 export const spawn = (command, parameters, options) =>
