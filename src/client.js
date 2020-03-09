@@ -14,6 +14,7 @@ import history from './history';
 import { updateMeta } from './dom-utils';
 import router from './router';
 import configureStore from './store/configure-store';
+import 'regenerator-runtime/runtime';
 
 if (__DEV__) {
   // eslint-disable-next-line global-require
