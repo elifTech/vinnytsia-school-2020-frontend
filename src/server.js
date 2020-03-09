@@ -1,6 +1,7 @@
 /* eslint-disable complexity, react-perf/jsx-no-new-object-as-prop */
 /* eslint-disable promise/prefer-await-to-callbacks */
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import isomorphicCookie from 'isomorphic-cookie';
@@ -54,6 +55,7 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(compression());
 
 //
 // Register server-side rendering middleware
