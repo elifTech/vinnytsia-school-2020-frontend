@@ -34,6 +34,7 @@ function Html(props) {
           <link key={script} rel="preload" href={script} as="script" />
         ))}
         <link rel="manifest" href="/site.webmanifest" />
+        <link rel="preconnect" href="https://fonts.googleapis.com/" />
         <link rel="apple-touch-icon" href="/icon.png" />
         {map(styles, style => (
           <Style cssText={style.cssText} id={style.id} key={style.id} />
