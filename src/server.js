@@ -145,9 +145,10 @@ app.use((error, request, response, next) => {
   console.error(pe.render(error));
   const html = ReactDOM.renderToStaticMarkup(
     <Html
-      title="Internal Server Error"
       description={error.message}
-      styles={[{ cssText: errorPageStyle._getCss(), id: 'css' }]} // eslint-disable-line no-underscore-dangle, react-perf/jsx-no-new-array-as-prop
+      // eslint-disable-next-line no-underscore-dangle, react-perf/jsx-no-new-array-as-prop
+      styles={[{ cssText: errorPageStyle._getCss(), id: 'css' }]}
+      title="Internal Server Error"
     >
       {ReactDOM.renderToString(<ErrorPageWithoutStyle error={error} />)}
     </Html>,

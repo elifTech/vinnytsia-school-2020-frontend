@@ -11,7 +11,7 @@ module.exports = {
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'plugin:array-func/all',
-    'plugin:react/recommended',
+    'plugin:react/all',
     'plugin:react-perf/recommended',
     'plugin:lodash/recommended',
     'prettier',
@@ -140,6 +140,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'lodash/prefer-lodash-method': ['warn', { ignoreObjects: ['history'] }],
+    'react/jsx-no-literals': 'off',
   },
 
   settings: {

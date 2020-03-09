@@ -26,22 +26,22 @@ function Html(props) {
     <html className="no-js" lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        <meta content="ie=edge" httpEquiv="x-ua-compatible" />
         <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta content={description} name="description" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
         {map(scripts, script => (
-          <link key={script} rel="preload" href={script} as="script" />
+          <link key={script} as="script" href={script} rel="preload" />
         ))}
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="preconnect" href="https://fonts.googleapis.com/" />
-        <link rel="apple-touch-icon" href="/icon.png" />
+        <link href="/site.webmanifest" rel="manifest" />
+        <link href="https://fonts.googleapis.com/" rel="preconnect" />
+        <link href="/icon.png" rel="apple-touch-icon" />
         {map(styles, style => (
-          <Style cssText={style.cssText} id={style.id} key={style.id} />
+          <Style key={style.id} cssText={style.cssText} id={style.id} />
         ))}
       </head>
       <body>
-        <div id="app" dangerouslySetInnerHTML={appHtml} />
+        <div dangerouslySetInnerHTML={appHtml} id="app" />
         <script dangerouslySetInnerHTML={serializedState} />
         {map(scripts, script => (
           <script key={script} src={script} />
@@ -51,9 +51,9 @@ function Html(props) {
         )}
         {config.analytics.googleTrackingId && (
           <script
-            src="https://www.google-analytics.com/analytics.js"
             async
             defer
+            src="https://www.google-analytics.com/analytics.js"
           />
         )}
       </body>
