@@ -1,10 +1,14 @@
 import fs from 'fs';
 import endsWith from 'lodash/endsWith';
 import filter from 'lodash/filter';
+import get from 'lodash/get';
+import head from 'lodash/head';
 import includes from 'lodash/includes';
+import invoke from 'lodash/invoke';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import replace from 'lodash/replace';
+import set from 'lodash/set';
 import toLower from 'lodash/toLower';
 import path from 'path';
 import webpack from 'webpack';
@@ -330,10 +334,10 @@ const clientConfig = {
           const fileFilter = file => !endsWith(file, '.map');
           const addPath = file => manifest.getPublicPath(file);
           const chunkFiles = reduce(
-            stats.compilation.chunkGroups,
+            get(stats, 'compilation.chunkGroups'),
             (accumulator, c) => {
-              accumulator[c.name] = [
-                ...(accumulator[c.name] || []),
+              set(accumulator, c.name, [
+                ...get(accumulator, c.name, []),
                 ...reduce(
                   c.chunks,
                   (files, cc) => [
@@ -342,7 +346,7 @@ const clientConfig = {
                   ],
                   [],
                 ),
-              ];
+              ]);
               return accumulator;
             },
             Object.create(null),
@@ -408,15 +412,15 @@ const serverConfig = {
   module: {
     ...config.module,
 
-    rules: overrideRules(config.module.rules, rule => {
+    rules: overrideRules(get(config, 'module.rules'), rule => {
       // Override babel-preset-env configuration for Node.js
       if (rule.loader === 'babel-loader') {
         return {
           ...rule,
           options: {
             ...rule.options,
-            presets: map(rule.options.presets, preset =>
-              preset[0] !== BABEL_PRESET_ENV
+            presets: map(get(rule, 'options.presets'), preset =>
+              head(preset) !== BABEL_PRESET_ENV
                 ? preset
                 : [
                     BABEL_PRESET_ENV,
@@ -424,7 +428,9 @@ const serverConfig = {
                       debug: false,
                       modules: false,
                       targets: {
-                        node: package_.engines.node.match(/(\d+\.?)+/)[0],
+                        node: head(
+                          invoke(package_, 'engines.node.match', /(\d+\.?)+/),
+                        ),
                       },
                       useBuiltIns: false,
                     },

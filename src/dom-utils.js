@@ -1,3 +1,4 @@
+import invoke from 'lodash/invoke';
 import isString from 'lodash/isString';
 
 export function updateTag(
@@ -7,7 +8,9 @@ export function updateTag(
   attributeName,
   attributeValue,
 ) {
-  const node = document.head.querySelector(
+  const node = invoke(
+    document,
+    'head.querySelector',
     `${tagName}[${keyName}="${keyValue}"]`,
   );
   if (node && node.getAttribute(attributeName) === attributeValue) return;
@@ -20,7 +23,7 @@ export function updateTag(
     const nextNode = document.createElement(tagName);
     nextNode.setAttribute(keyName, keyValue);
     nextNode.setAttribute(attributeName, attributeValue);
-    document.head.append(nextNode);
+    invoke(document, 'head.append', nextNode);
   }
 }
 

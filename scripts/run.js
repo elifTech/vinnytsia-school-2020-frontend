@@ -1,5 +1,7 @@
 import isUndefined from 'lodash/isUndefined';
+import nth from 'lodash/nth';
 import replace from 'lodash/replace';
+import size from 'lodash/size';
 
 export function format(time) {
   return replace(time.toTimeString(), /.*(\d{2}:\d{2}:\d{2}).*/, '$1');
@@ -24,12 +26,12 @@ export default async function run(fn, options) {
   return resolution;
 }
 
-if (require.main === module && process.argv.length > 2) {
+if (require.main === module && size(process.argv) > 2) {
   // eslint-disable-next-line no-underscore-dangle
   delete require.cache[__filename];
 
   // eslint-disable-next-line global-require, import/no-dynamic-require
-  const module = require(`./${process.argv[2]}.js`).default;
+  const module = require(`./${nth(process.argv, 2)}.js`).default;
 
   run(module).catch(error => {
     console.error(error.stack);

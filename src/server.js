@@ -4,6 +4,9 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import isomorphicCookie from 'isomorphic-cookie';
 import forEach from 'lodash/forEach';
+import get from 'lodash/get';
+import invoke from 'lodash/invoke';
+import set from 'lodash/set';
 import nodeFetch from 'node-fetch';
 import path from 'path';
 import PrettyError from 'pretty-error';
@@ -34,7 +37,7 @@ process.on('unhandledRejection', (reason, p) => {
 // user agent is not known.
 // -----------------------------------------------------------------------------
 global.navigator = global.navigator || {};
-global.navigator.userAgent = global.navigator.userAgent || 'all';
+set(global, 'navigator.userAgent', get(global, 'navigator.userAgent') || 'all');
 
 const app = express();
 
@@ -101,8 +104,9 @@ app.get('*', async (request, response, next) => {
 
     const scripts = new Set();
     const addChunk = chunk => {
-      if (chunks[chunk]) {
-        forEach(chunks[chunk], asset => scripts.add(asset));
+      const assets = get(chunks, chunk);
+      if (assets) {
+        forEach(assets, asset => scripts.add(asset));
       } else if (__DEV__) {
         throw new Error(`Chunk with name '${chunk}' cannot be found`);
       }
@@ -113,7 +117,7 @@ app.get('*', async (request, response, next) => {
 
     data.scripts = Array.from(scripts);
     data.app = {
-      apiUrl: config.api.clientUrl,
+      apiUrl: get(config, 'api.clientUrl'),
     };
 
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -163,7 +167,7 @@ if (!module.hot) {
 // -----------------------------------------------------------------------------
 if (module.hot) {
   app.hot = module.hot;
-  module.hot.accept('./router');
+  invoke(module, 'hot.accept', './router');
 }
 
 export default app;
