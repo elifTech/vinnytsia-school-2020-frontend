@@ -1,9 +1,9 @@
-/* eslint-disable unicorn/prevent-abbreviations */
 // ESLint configuration
 // http://eslint.org/docs/user-guide/configuring
 module.exports = {
   env: {
     browser: true,
+    'jest/globals': true,
   },
   extends: [
     'airbnb',
@@ -11,14 +11,25 @@ module.exports = {
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'plugin:array-func/all',
+    'plugin:react/all',
     'plugin:react-perf/recommended',
     'plugin:lodash/recommended',
+    'plugin:eslint-comments/recommended',
+    'plugin:jest/all',
     'prettier',
     'prettier/react',
   ],
   globals: {
     __DEV__: true,
   },
+  overrides: [
+    {
+      files: ['scripts/**/*'],
+      rules: {
+        'unicorn/no-process-exit': 'off',
+      },
+    },
+  ],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
@@ -34,9 +45,12 @@ module.exports = {
     'promise',
     'unicorn',
     'array-func',
+    'eslint-comments',
+    'react',
     'react-perf',
     'react-hooks',
     'lodash',
+    'jest',
   ],
 
   rules: {
@@ -138,6 +152,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
     'lodash/prefer-lodash-method': ['warn', { ignoreObjects: ['history'] }],
+    'react/jsx-no-literals': 'off',
   },
 
   settings: {

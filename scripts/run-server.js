@@ -1,4 +1,7 @@
 import cp from 'child_process';
+import get from 'lodash/get';
+import invoke from 'lodash/invoke';
+import nth from 'lodash/nth';
 import replace from 'lodash/replace';
 import path from 'path';
 import webpackConfig from './webpack.config';
@@ -10,8 +13,8 @@ let server;
 let pending = true;
 const [, serverConfig] = webpackConfig;
 const serverPath = path.join(
-  serverConfig.output.path,
-  replace(serverConfig.output.filename, '[name]', 'server'),
+  get(serverConfig, 'output.path'),
+  replace(get(serverConfig, 'output.filename'), '[name]', 'server'),
 );
 
 // Launch or restart the Node.js server
@@ -21,13 +24,19 @@ export default function runServer() {
       const time = new Date().toTimeString();
       const match = data.toString('utf8').match(RUNNING_REGEXP);
 
-      process.stdout.write(replace(time, /.*(\d{2}:\d{2}:\d{2}).*/, '[$1] '));
-      process.stdout.write(data);
+      invoke(
+        process,
+        'stdout.write',
+        replace(time, /.*(\d{2}:\d{2}:\d{2}).*/, '[$1] '),
+      );
+      invoke(process, 'stdout.write', data);
 
       if (match) {
-        server.host = match[1];
-        server.stdout.removeListener('data', onStdOut);
-        server.stdout.on('data', x => process.stdout.write(x));
+        server.host = nth(match, 1);
+        invoke(server, 'stdout.removeListener', 'data', onStdOut);
+        invoke(server, 'stdout.on', 'data', x =>
+          invoke(process, 'stdout.write', x),
+        );
         pending = false;
         resolve(server);
       }
@@ -52,8 +61,10 @@ export default function runServer() {
       });
     }
 
-    server.stdout.on('data', onStdOut);
-    server.stderr.on('data', x => process.stderr.write(x));
+    invoke(server, 'stdout.on', 'data', onStdOut);
+    invoke(server, 'stderr.on', 'data', x =>
+      invoke(process, 'stderr.write', x),
+    );
 
     return server;
   });

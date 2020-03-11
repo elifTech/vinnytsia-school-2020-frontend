@@ -1,13 +1,13 @@
-/* eslint-disable promise/prefer-await-to-then */
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/no-promise-in-callback */
 import browserSync from 'browser-sync';
 import express from 'express';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
+import get from 'lodash/get';
 import includes from 'lodash/includes';
+import invoke from 'lodash/invoke';
 import lodashReject from 'lodash/reject';
 import replace from 'lodash/replace';
+import set from 'lodash/set';
 import path from 'path';
 import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware';
 import webpack from 'webpack';
@@ -31,16 +31,16 @@ const watchOptions = {
 function createCompilationPromise(name, compiler, config) {
   return new Promise((resolve, reject) => {
     let timeStart = new Date();
-    compiler.hooks.compile.tap(name, () => {
+    invoke(compiler, 'hooks.compile.tap', name, () => {
       timeStart = new Date();
       console.info(`[${format(timeStart)}] Compiling '${name}'...`);
     });
 
-    compiler.hooks.done.tap(name, stats => {
-      console.info(stats.toString(config.stats));
+    invoke(compiler, 'hooks.done.tap', name, stats => {
+      console.info(invoke(stats, 'toString', config.stats));
       const timeEnd = new Date();
       const time = timeEnd.getTime() - timeStart.getTime();
-      if (stats.hasErrors()) {
+      if (invoke(stats, 'hasErrors')) {
         console.info(
           `[${format(timeEnd)}] Failed to compile '${name}' after ${time} ms`,
         );
@@ -71,35 +71,56 @@ async function start() {
 
   // Configure client-side hot module replacement
   const clientConfig = find(webpackConfig, ['name', 'client']);
-  clientConfig.entry.client = ['./scripts/lib/webpack-hot-development-client']
-    .concat(clientConfig.entry.client)
-    .sort((a, b) => includes(b, 'polyfill') - includes(a, 'polyfill'));
-  clientConfig.output.filename = replace(
-    clientConfig.output.filename,
-    'chunkhash',
-    'hash',
+  set(
+    clientConfig,
+    'entry.client',
+    ['./scripts/lib/webpack-hot-development-client']
+      .concat(get(clientConfig, 'entry.client'))
+      .sort((a, b) => includes(b, 'polyfill') - includes(a, 'polyfill')),
   );
-  clientConfig.output.chunkFilename = replace(
-    clientConfig.output.chunkFilename,
-    'chunkhash',
-    'hash',
+  set(
+    clientConfig,
+    'output.filename',
+    replace(get(clientConfig, 'output.filename'), 'chunkhash', 'hash'),
   );
-  clientConfig.module.rules = lodashReject(clientConfig.module.rules, [
-    'loader',
-    'null-loader',
-  ]);
-  clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+  set(
+    clientConfig,
+    'output.chunkFilename',
+    replace(get(clientConfig, 'output.chunkFilename'), 'chunkhash', 'hash'),
+  );
+  set(
+    clientConfig,
+    'module.rules',
+    lodashReject(get(clientConfig, 'module.rules'), ['loader', 'null-loader']),
+  );
+  invoke(
+    clientConfig,
+    'plugins.push',
+    new webpack.HotModuleReplacementPlugin(),
+  );
 
   // Configure server-side hot module replacement
   const serverConfig = find(webpackConfig, ['name', 'server']);
-  serverConfig.output.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
-  serverConfig.output.hotUpdateChunkFilename =
-    'updates/[id].[hash].hot-update.js';
-  serverConfig.module.rules = lodashReject(serverConfig.module.rules, [
-    'loader',
-    'null-loader',
-  ]);
-  serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+  set(
+    serverConfig,
+    'output.hotUpdateMainFilename',
+    'updates/[hash].hot-update.json',
+  );
+  set(
+    serverConfig,
+    'output.hotUpdateChunkFilename',
+    'updates/[id].[hash].hot-update.js',
+  );
+  set(
+    serverConfig,
+    'module.rules',
+    lodashReject(get(serverConfig, 'module.rules'), ['loader', 'null-loader']),
+  );
+  invoke(
+    serverConfig,
+    'plugins.push',
+    new webpack.HotModuleReplacementPlugin(),
+  );
 
   // Configure compilation
   await run(clean);
@@ -121,7 +142,7 @@ async function start() {
   server.use(
     webpackDevMiddleware(clientCompiler, {
       logLevel: 'silent',
-      publicPath: clientConfig.output.publicPath,
+      publicPath: get(clientConfig, 'output.publicPath'),
       watchOptions,
     }),
   );
@@ -132,7 +153,7 @@ async function start() {
   let appPromise;
   let appPromiseResolve;
   let appPromiseIsResolved = true;
-  serverCompiler.hooks.compile.tap('server', () => {
+  invoke(serverCompiler, 'hooks.compile.tap', 'server', () => {
     if (!appPromiseIsResolved) return;
     appPromiseIsResolved = false;
     // eslint-disable-next-line no-return-assign
@@ -140,60 +161,61 @@ async function start() {
   });
 
   let app;
-  server.use((request, response) => {
-    appPromise
-      .then(() => app.handle(request, response))
-      .catch(error => console.error(error));
+  server.use(async (request, response) => {
+    try {
+      await appPromise;
+      app.handle(request, response);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
-  function checkForUpdate(fromUpdate) {
+  async function checkForUpdate(fromUpdate) {
     const hmrPrefix = '[\u001B[35mHMR\u001B[0m] ';
     if (!app.hot) {
       throw new Error(`${hmrPrefix}Hot Module Replacement is disabled.`);
     }
-    if (app.hot.status() !== 'idle') {
+    if (invoke(app, 'hot.status') !== 'idle') {
       return Promise.resolve();
     }
-    return app.hot
-      .check(true)
-      .then(updatedModules => {
-        if (!updatedModules) {
-          if (fromUpdate) {
-            console.info(`${hmrPrefix}Update applied.`);
-          }
-          return;
+    try {
+      const updatedModules = await invoke(app, 'hot.check', true);
+      if (!updatedModules) {
+        if (fromUpdate) {
+          console.info(`${hmrPrefix}Update applied.`);
         }
-        if (updatedModules.length === 0) {
-          console.info(`${hmrPrefix}Nothing hot updated.`);
-        } else {
-          console.info(`${hmrPrefix}Updated modules:`);
-          forEach(updatedModules, moduleId =>
-            console.info(`${hmrPrefix} - ${moduleId}`),
-          );
-          checkForUpdate(true);
-        }
-      })
-      .catch(error => {
-        if (includes(['abort', 'fail'], app.hot.status())) {
-          console.warn(`${hmrPrefix}Cannot apply update.`);
-          delete require.cache[require.resolve('../build/server')];
-          // eslint-disable-next-line global-require, import/no-unresolved
-          app = require('../build/server').default;
-          console.warn(`${hmrPrefix}App has been reloaded.`);
-        } else {
-          console.warn(
-            `${hmrPrefix}Update failed: ${error.stack || error.message}`,
-          );
-        }
-      });
+        return Promise.resolve();
+      }
+      if (updatedModules.length === 0) {
+        console.info(`${hmrPrefix}Nothing hot updated.`);
+      } else {
+        console.info(`${hmrPrefix}Updated modules:`);
+        forEach(updatedModules, moduleId =>
+          console.info(`${hmrPrefix} - ${moduleId}`),
+        );
+        checkForUpdate(true);
+      }
+    } catch (error) {
+      if (includes(['abort', 'fail'], invoke(app, 'hot.status'))) {
+        console.warn(`${hmrPrefix}Cannot apply update.`);
+        delete require.cache[require.resolve('../build/server')];
+        // eslint-disable-next-line global-require, import/no-unresolved
+        app = require('../build/server').default;
+        console.warn(`${hmrPrefix}App has been reloaded.`);
+      } else {
+        console.warn(
+          `${hmrPrefix}Update failed: ${error.stack || error.message}`,
+        );
+      }
+    }
+    return Promise.resolve();
   }
 
-  serverCompiler.watch(watchOptions, (error, stats) => {
-    if (app && !error && !stats.hasErrors()) {
-      checkForUpdate().then(() => {
-        appPromiseIsResolved = true;
-        appPromiseResolve();
-      });
+  invoke(serverCompiler, 'watch', watchOptions, async (error, stats) => {
+    if (app && !error && !invoke(stats, 'hasErrors')) {
+      await checkForUpdate();
+      appPromiseIsResolved = true;
+      appPromiseResolve();
     }
   });
 

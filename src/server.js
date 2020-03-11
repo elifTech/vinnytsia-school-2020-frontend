@@ -1,19 +1,19 @@
-/* eslint-disable complexity, react-perf/jsx-no-new-object-as-prop */
-/* eslint-disable promise/prefer-await-to-callbacks */
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import isomorphicCookie from 'isomorphic-cookie';
-import StyleContext from 'isomorphic-style-loader/StyleContext';
 import forEach from 'lodash/forEach';
+import get from 'lodash/get';
+import invoke from 'lodash/invoke';
+import set from 'lodash/set';
 import nodeFetch from 'node-fetch';
 import path from 'path';
 import PrettyError from 'pretty-error';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
-import { Provider as ReduxProvider } from 'react-redux';
-import App from './components/App';
 import Html from './components/Html';
+import WrappedApp from './components/WrappedApp';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import router from './router';
@@ -37,7 +37,7 @@ process.on('unhandledRejection', (reason, p) => {
 // user agent is not known.
 // -----------------------------------------------------------------------------
 global.navigator = global.navigator || {};
-global.navigator.userAgent = global.navigator.userAgent || 'all';
+set(global, 'navigator.userAgent', get(global, 'navigator.userAgent') || 'all');
 
 const app = express();
 
@@ -54,6 +54,7 @@ app.use(express.static(path.resolve(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(compression());
 
 //
 // Register server-side rendering middleware
@@ -61,13 +62,6 @@ app.use(bodyParser.json());
 app.get('*', async (request, response, next) => {
   try {
     const css = new Set();
-
-    // Enables critical path CSS rendering
-    // https://github.com/kriasoft/isomorphic-style-loader
-    const insertCss = (...styles) => {
-      // eslint-disable-next-line no-underscore-dangle
-      forEach(styles, style => css.add(style._getCss()));
-    };
     const initialState = {};
 
     const store = configureStore(initialState, {
@@ -97,18 +91,22 @@ app.get('*', async (request, response, next) => {
 
     const data = { ...route };
     data.children = ReactDOM.renderToString(
-      <StyleContext.Provider value={{ insertCss }}>
-        <ReduxProvider store={context.store}>
-          <App context={context}>{route.component}</App>
-        </ReduxProvider>
-      </StyleContext.Provider>,
+      <WrappedApp
+        path={context.pathname}
+        query={context.query}
+        store={store}
+        token={context.token}
+      >
+        {route.component}
+      </WrappedApp>,
     );
     data.styles = [{ cssText: Array.from(css).join(''), id: 'css' }];
 
     const scripts = new Set();
     const addChunk = chunk => {
-      if (chunks[chunk]) {
-        forEach(chunks[chunk], asset => scripts.add(asset));
+      const assets = get(chunks, chunk);
+      if (assets) {
+        forEach(assets, asset => scripts.add(asset));
       } else if (__DEV__) {
         throw new Error(`Chunk with name '${chunk}' cannot be found`);
       }
@@ -119,7 +117,7 @@ app.get('*', async (request, response, next) => {
 
     data.scripts = Array.from(scripts);
     data.app = {
-      apiUrl: config.api.clientUrl,
+      apiUrl: get(config, 'api.clientUrl'),
     };
 
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -143,9 +141,10 @@ app.use((error, request, response, next) => {
   console.error(pe.render(error));
   const html = ReactDOM.renderToStaticMarkup(
     <Html
-      title="Internal Server Error"
       description={error.message}
-      styles={[{ cssText: errorPageStyle._getCss(), id: 'css' }]} // eslint-disable-line no-underscore-dangle, react-perf/jsx-no-new-array-as-prop
+      // eslint-disable-next-line no-underscore-dangle, react-perf/jsx-no-new-array-as-prop
+      styles={[{ cssText: errorPageStyle._getCss(), id: 'css' }]}
+      title="Internal Server Error"
     >
       {ReactDOM.renderToString(<ErrorPageWithoutStyle error={error} />)}
     </Html>,
@@ -168,7 +167,7 @@ if (!module.hot) {
 // -----------------------------------------------------------------------------
 if (module.hot) {
   app.hot = module.hot;
-  module.hot.accept('./router');
+  invoke(module, 'hot.accept', './router');
 }
 
 export default app;

@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 function Style({ id, cssText }) {
   const innerHtml = useMemo(() => ({ __html: cssText }), [cssText]);
   // eslint-disable-next-line react/no-danger
-  return <style id={id} dangerouslySetInnerHTML={innerHtml} />;
+  return <style dangerouslySetInnerHTML={innerHtml} id={id} />;
 }
 Style.propTypes = {
   cssText: PropTypes.string.isRequired,

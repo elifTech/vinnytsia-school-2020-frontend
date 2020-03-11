@@ -1,5 +1,5 @@
-/* eslint-disable complexity */
 import includes from 'lodash/includes';
+import invoke from 'lodash/invoke';
 import path from 'path';
 import fetch from 'node-fetch';
 import { spawn } from './lib/cp';
@@ -86,8 +86,8 @@ export default async function deploy() {
 
   // Build the project in RELEASE mode which
   // generates optimized and minimized bundles
-  process.argv.push('--release');
-  if (remote.static) process.argv.push('--static');
+  invoke(process, 'argv.push', '--release');
+  if (remote.static) invoke(process, 'argv.push', '--static');
   await run(require('./build').default); // eslint-disable-line global-require
   if (includes(process.argv, '--static')) {
     await cleanDirectory('build/*', {

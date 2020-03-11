@@ -1,11 +1,10 @@
+import get from 'lodash/get';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
 import serialize from 'serialize-javascript';
 import config from '../config';
 import Style from './Style';
-
-/* eslint-disable react/no-danger */
 
 function Html(props) {
   const { title, description, styles, scripts, app, children } = props;
@@ -18,7 +17,10 @@ function Html(props) {
     () => ({
       __html:
         'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-        `ga('create','${config.analytics.googleTrackingId}','auto');ga('send','pageview')`,
+        `ga('create','${get(
+          config,
+          'analytics.googleTrackingId',
+        )}','auto');ga('send','pageview')`,
     }),
     [],
   );
@@ -26,33 +28,37 @@ function Html(props) {
     <html className="no-js" lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta httpEquiv="x-ua-compatible" content="ie=edge" />
+        <meta content="ie=edge" httpEquiv="x-ua-compatible" />
         <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta content={description} name="description" />
+        <meta content="width=device-width, initial-scale=1" name="viewport" />
         {map(scripts, script => (
-          <link key={script} rel="preload" href={script} as="script" />
+          <link key={script} as="script" href={script} rel="preload" />
         ))}
-        <link rel="manifest" href="/site.webmanifest" />
-        <link rel="apple-touch-icon" href="/icon.png" />
+        <link href="/site.webmanifest" rel="manifest" />
+        <link href="https://fonts.googleapis.com/" rel="preconnect" />
+        <link href="/icon.png" rel="apple-touch-icon" />
         {map(styles, style => (
-          <Style cssText={style.cssText} id={style.id} key={style.id} />
+          <Style key={style.id} cssText={style.cssText} id={style.id} />
         ))}
       </head>
       <body>
-        <div id="app" dangerouslySetInnerHTML={appHtml} />
+        {/* eslint-disable-next-line react/no-danger */}
+        <div dangerouslySetInnerHTML={appHtml} id="app" />
+        {/* eslint-disable-next-line react/no-danger */}
         <script dangerouslySetInnerHTML={serializedState} />
         {map(scripts, script => (
           <script key={script} src={script} />
         ))}
-        {config.analytics.googleTrackingId && (
+        {get(config, 'analytics.googleTrackingId') && (
+          /* eslint-disable-next-line react/no-danger */
           <script dangerouslySetInnerHTML={ga} />
         )}
-        {config.analytics.googleTrackingId && (
+        {get(config, 'analytics.googleTrackingId') && (
           <script
-            src="https://www.google-analytics.com/analytics.js"
             async
             defer
+            src="https://www.google-analytics.com/analytics.js"
           />
         )}
       </body>

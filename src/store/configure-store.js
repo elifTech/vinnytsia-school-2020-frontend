@@ -1,3 +1,4 @@
+import invoke from 'lodash/invoke';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { name, version } from '../../package.json';
@@ -36,7 +37,7 @@ export default function configureStore(initialState) {
 
   // Hot reload reducers (requires Webpack or Browserify HMR to be enabled)
   if (__DEV__ && module.hot) {
-    module.hot.accept('../reducers', () =>
+    invoke(module, 'hot.accept', '../reducers', () =>
       // eslint-disable-next-line global-require
       store.replaceReducer(require('../reducers').default),
     );

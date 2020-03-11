@@ -1,4 +1,6 @@
-/* eslint-disable promise/prefer-await-to-callbacks */
+import get from 'lodash/get';
+import head from 'lodash/head';
+import invoke from 'lodash/invoke';
 import webpack from 'webpack';
 import webpackConfig from './webpack.config';
 
@@ -7,13 +9,15 @@ import webpackConfig from './webpack.config';
  */
 export default function bundle() {
   return new Promise((resolve, reject) => {
-    webpack(webpackConfig).run((eroor, stats) => {
-      if (eroor) {
-        return reject(eroor);
+    invoke(webpack(webpackConfig), 'run', (error, stats) => {
+      if (error) {
+        return reject(error);
       }
 
-      console.info(stats.toString(webpackConfig[0].stats));
-      if (stats.hasErrors()) {
+      console.info(
+        invoke(stats, 'toString', get(head(webpackConfig), 'stats')),
+      );
+      if (invoke(stats, 'hasErrors')) {
         return reject(new Error('Webpack compilation errors'));
       }
 
