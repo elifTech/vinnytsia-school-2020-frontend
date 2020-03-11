@@ -22,6 +22,18 @@ import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unr
 import config from './config';
 import configureStore from './store/configure-store';
 
+function getCss() {
+  const css = new Set();
+  return [
+    css,
+    // Enables critical path CSS rendering
+    // https://github.com/kriasoft/isomorphic-style-loader
+    (...styles) => {
+      // eslint-disable-next-line no-underscore-dangle
+      forEach(styles, style => css.add(style._getCss()));
+    },
+  ];
+}
 const FOUND = 302;
 const INTERNAL_SERVER_ERROR = 500;
 const OK = 200;
@@ -61,7 +73,7 @@ app.use(compression());
 // -----------------------------------------------------------------------------
 app.get('*', async (request, response, next) => {
   try {
-    const css = new Set();
+    const [css, insertCss] = getCss();
     const initialState = {};
 
     const store = configureStore(initialState, {
@@ -92,6 +104,7 @@ app.get('*', async (request, response, next) => {
     const data = { ...route };
     data.children = ReactDOM.renderToString(
       <WrappedApp
+        insertCss={insertCss}
         path={context.pathname}
         query={context.query}
         store={store}
