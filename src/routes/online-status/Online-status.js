@@ -6,7 +6,7 @@ class OnlineStatus extends PureComponent {
   render() {
     return (
       <div className={s.root}>
-        <div className={s.container}>Chheck online status</div>
+        <div className={s.container}>Check online status</div>
       </div>
     );
   }
