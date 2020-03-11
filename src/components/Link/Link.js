@@ -13,7 +13,7 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
-function isExternal(to) {
+export function isExternal(to) {
   if (startsWith(to, 'http://') || startsWith(to, 'https://')) {
     return true;
   }

@@ -6,12 +6,14 @@ import routes from './routes';
 
 const router = new UniversalRouter(routes, {
   async resolveRoute(context, parameters) {
-    if (isFunction(get(context, 'route.load'))) {
-      const action = await invoke(context, 'route.load');
+    const load = get(context, 'route.load');
+    if (isFunction(load)) {
+      const action = await load();
       return invoke(action, 'default', context, parameters);
     }
-    if (isFunction(get(context, 'route.action'))) {
-      return invoke(context, 'route.action', context, parameters);
+    const action = get(context, 'route.action');
+    if (isFunction(action)) {
+      return action(context, parameters);
     }
     return undefined;
   },
