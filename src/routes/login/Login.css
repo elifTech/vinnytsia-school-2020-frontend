@@ -1,8 +1,8 @@
-.containerAuth {
+.containerLogin {
   display: flex;
   flex-direction: column;
 }
-.formContiner {
+.formContainer {
   display: flex;
   flex-direction: column;
   width: 60%;
@@ -10,15 +10,15 @@
   padding: 30px;
   background: #cecece;
 }
-.formContiner label,
-.formContiner button {
+.formContainer label,
+.formContainer button {
   margin: 10px 0 0;
 }
-.formContiner input {
+.formContainer input {
   height: 30px;
   padding-left: 15px;
 }
-.formContiner button {
+.formContainer button {
   border: none;
   border-radius: 5px;
   height: 25px;
@@ -26,15 +26,15 @@
   margin-right: 10px;
   outline: none;
 }
-.formContiner button:hover {
+.formContainer button:hover {
   cursor: pointer;
 }
-.textAuth {
+.textLogin {
   color: #cecece;
   display: flex;
   width: 100%;
   justify-content: center;
 }
-.wrapperForButtobAuth {
+.wrapperForButtonLogin {
   display: flex;
 }

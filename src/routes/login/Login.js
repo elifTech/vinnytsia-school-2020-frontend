@@ -1,8 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useReducer } from 'react';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import s from './Auth.css';
+import s from './Login.css';
 
-function Auth() {
+function Login() {
   const [inputValue, setInputValue] = useState({
     password: '',
     email: '',
@@ -17,20 +17,20 @@ function Auth() {
       };
     });
   }, []);
-  const btnAuthHandler = useCallback(
+  const btnLoginHandler = useCallback(
     e => {
       e.preventDefault();
       const { name } = e.target;
       switch (name) {
         case 'logIn':
           console.log('What we do now? :', name);
-          console.log('What mail of user is? :', inputValue.password);
-          console.log('What password is? :', inputValue.email);
+          console.log('What mail of user is? :', inputValue.email);
+          console.log('What password is? :', inputValue.password);
           break;
         case 'registration':
           console.log('What we do now? :', name);
-          console.log('What mail of user is? :', inputValue.password);
-          console.log('What password is? :', inputValue.email);
+          console.log('What mail of user is? :', inputValue.email);
+          console.log('What password is? :', inputValue.password);
           break;
       }
     },
@@ -38,11 +38,11 @@ function Auth() {
   );
   console.log(inputValue.password);
   return (
-    <div className={s.containerAuth}>
-      <h1 className={s.textAuth}>
+    <div className={s.containerLogin}>
+      <h1 className={s.textLogin}>
         Want to be on safe? Please, log in or register
       </h1>
-      <form className={s.formContiner}>
+      <form className={s.formContainer}>
         <label htmlFor="email">Email </label>
         <input
           type="email"
@@ -59,11 +59,11 @@ function Auth() {
           value={inputValue.password}
           onChange={inputChangeHandler}
         />
-        <div className={s.wrapperForButtobAuth}>
-          <button type="submit" name="logIn" onClick={btnAuthHandler}>
+        <div className={s.wrapperForButtonLogin}>
+          <button type="submit" name="logIn" onClick={btnLoginHandler}>
             Log in
           </button>
-          <button type="submit" name="registration" onClick={btnAuthHandler}>
+          <button type="submit" name="registration" onClick={btnLoginHandler}>
             Registration
           </button>
         </div>
@@ -71,5 +71,5 @@ function Auth() {
     </div>
   );
 }
-Auth.whyDidYouRender = true;
-export default withStyles(s)(React.memo(Auth));
+Login.whyDidYouRender = true;
+export default withStyles(s)(React.memo(Login));
