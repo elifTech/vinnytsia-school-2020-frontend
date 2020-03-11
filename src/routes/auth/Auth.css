@@ -1,0 +1,40 @@
+.containerAuth {
+  display: flex;
+  flex-direction: column;
+}
+.formContiner {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 15px auto;
+  padding: 30px;
+  background: #cecece;
+}
+.formContiner label,
+.formContiner button {
+  margin: 10px 0 0;
+}
+.formContiner input {
+  height: 30px;
+  padding-left: 15px;
+}
+.formContiner button {
+  border: none;
+  border-radius: 5px;
+  height: 25px;
+  background: #eee;
+  margin-right: 10px;
+  outline: none;
+}
+.formContiner button:hover {
+  cursor: pointer;
+}
+.textAuth {
+  color: #cecece;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.wrapperForButtobAuth {
+  display: flex;
+}
