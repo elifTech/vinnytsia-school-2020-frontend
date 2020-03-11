@@ -1,7 +1,7 @@
 import withStyles from 'isomorphic-style-loader/withStyles';
 import startsWith from 'lodash/startsWith';
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import history from '../../history';
 import style from './Link.css';
 
@@ -13,61 +13,58 @@ function isModifiedEvent(event) {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 }
 
-function isExternal(to) {
+export function isExternal(to) {
   if (startsWith(to, 'http://') || startsWith(to, 'https://')) {
     return true;
   }
   return false;
 }
 
-class Link extends React.PureComponent {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    className: PropTypes.string,
-    onClick: PropTypes.func,
-    to: PropTypes.string.isRequired,
-  };
+function Link(props) {
+  const { children, className, onClick, to } = props;
+  const handleClick = useCallback(
+    event => {
+      if (onClick) {
+        onClick(event);
+      }
 
-  static defaultProps = {
-    className: '',
-    onClick: null,
-  };
+      if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
+        return;
+      }
 
-  handleClick = event => {
-    const { onClick, to } = this.props;
-    if (onClick) {
-      onClick(event);
-    }
+      if (event.defaultPrevented === true) {
+        return;
+      }
 
-    if (isModifiedEvent(event) || !isLeftClickEvent(event)) {
-      return;
-    }
+      if (!isExternal(to)) {
+        event.preventDefault();
+        history.push(to);
+      }
+    },
+    [onClick, to],
+  );
 
-    if (event.defaultPrevented === true) {
-      return;
-    }
-
-    if (!isExternal(to)) {
-      event.preventDefault();
-      history.push(to);
-    }
-  };
-
-  static whyDidYouRender = true;
-
-  render() {
-    const { to, children, className } = this.props;
-    return (
-      <a
-        className={className}
-        href={to}
-        onClick={this.handleClick}
-        target={isExternal(to) ? '_blank' : undefined}
-      >
-        {children}
-      </a>
-    );
-  }
+  return (
+    <a
+      className={className}
+      href={to}
+      onClick={handleClick}
+      target={isExternal(to) ? '_blank' : undefined}
+    >
+      {children}
+    </a>
+  );
 }
+Link.propTypes = {
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  onClick: PropTypes.func,
+  to: PropTypes.string.isRequired,
+};
+Link.defaultProps = {
+  className: '',
+  onClick: null,
+};
+Link.whyDidYouRender = true;
 
 export default withStyles(style)(memo(Link));

@@ -1,3 +1,4 @@
+import get from 'lodash/get';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
@@ -16,7 +17,10 @@ function Html(props) {
     () => ({
       __html:
         'window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;' +
-        `ga('create','${config.analytics.googleTrackingId}','auto');ga('send','pageview')`,
+        `ga('create','${get(
+          config,
+          'analytics.googleTrackingId',
+        )}','auto');ga('send','pageview')`,
     }),
     [],
   );
@@ -46,11 +50,11 @@ function Html(props) {
         {map(scripts, script => (
           <script key={script} src={script} />
         ))}
-        {config.analytics.googleTrackingId && (
+        {get(config, 'analytics.googleTrackingId') && (
           /* eslint-disable-next-line react/no-danger */
           <script dangerouslySetInnerHTML={ga} />
         )}
-        {config.analytics.googleTrackingId && (
+        {get(config, 'analytics.googleTrackingId') && (
           <script
             async
             defer

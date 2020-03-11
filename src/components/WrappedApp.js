@@ -1,4 +1,3 @@
-import forEach from 'lodash/forEach';
 import fetch from 'node-fetch';
 import PropTypes from 'prop-types';
 import React, { useMemo } from 'react';
@@ -7,8 +6,7 @@ import StyleContext from 'isomorphic-style-loader/StyleContext';
 import App from './App';
 
 function WrappedApp(props) {
-  const { children, path, query, store, token } = props;
-  const css = new Set();
+  const { children, insertCss, path, query, store, token } = props;
 
   const context = useMemo(
     () => ({
@@ -27,12 +25,9 @@ function WrappedApp(props) {
     () => ({
       // Enables critical path CSS rendering
       // https://github.com/kriasoft/isomorphic-style-loader
-      insertCss: (...styles) => {
-        // eslint-disable-next-line no-underscore-dangle
-        forEach(styles, style => css.add(style._getCss()));
-      },
+      insertCss,
     }),
-    [css],
+    [insertCss],
   );
   return (
     <StyleContext.Provider value={styleValue}>
@@ -44,6 +39,7 @@ function WrappedApp(props) {
 }
 WrappedApp.propTypes = {
   children: PropTypes.node.isRequired,
+  insertCss: PropTypes.func.isRequired,
   path: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   query: PropTypes.object,

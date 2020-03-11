@@ -1,3 +1,6 @@
+import invoke from 'lodash/invoke';
+import nth from 'lodash/nth';
+
 const routes = [
   {
     action({ next }) {
@@ -29,6 +32,10 @@ const routes = [
       },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
+        load: () => import(/* webpackChunkName: 'chat' */ './chat'),
+        path: '/chat',
+      },
+      {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
         path: '(.+)',
       },
@@ -40,7 +47,7 @@ const routes = [
 
 // The error page is available by permanent url for development mode
 if (__DEV__) {
-  routes[1].children.unshift({
+  invoke(nth(routes, 1), 'children.unshift', {
     // eslint-disable-next-line global-require
     action: require('./error').default,
     path: '/error',
