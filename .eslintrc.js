@@ -3,6 +3,7 @@
 module.exports = {
   env: {
     browser: true,
+    'jest/globals': true,
   },
   extends: [
     'airbnb',
@@ -14,6 +15,7 @@ module.exports = {
     'plugin:react-perf/recommended',
     'plugin:lodash/recommended',
     'plugin:eslint-comments/recommended',
+    'plugin:jest/all',
     'prettier',
     'prettier/react',
   ],
@@ -48,6 +50,7 @@ module.exports = {
     'react-perf',
     'react-hooks',
     'lodash',
+    'jest',
   ],
 
   rules: {
