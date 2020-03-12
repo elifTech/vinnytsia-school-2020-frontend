@@ -1,72 +1,63 @@
-import React, { useState, useCallback, useReducer } from 'react';
+import React, { useState, useCallback } from 'react';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import s from './Login.css';
+import Input from './components/Input';
+import Button from './components/Button';
 
 function Login() {
   const [inputValue, setInputValue] = useState({
     password: '',
     email: '',
   });
-  const inputChangeHandler = useCallback(e => {
-    const { name } = e.target;
-    const { value } = e.target;
-    setInputValue(prev => {
+  const inputChangeHandler = useCallback(event => {
+    const { name } = event.target;
+    const { value } = event.target;
+    setInputValue(previous => {
       return {
-        ...prev,
+        ...previous,
         [name]: value,
       };
     });
   }, []);
-  const btnLoginHandler = useCallback(
-    e => {
-      e.preventDefault();
-      const { name } = e.target;
+  const buttonLoginHandler = useCallback(
+    event => {
+      event.preventDefault();
+      const { name } = event.target;
       switch (name) {
         case 'logIn':
-          console.log('What we do now? :', name);
-          console.log('What mail of user is? :', inputValue.email);
-          console.log('What password is? :', inputValue.password);
+          console.info('What we do now? :', name);
+          console.info('What mail of user is? :', inputValue.email);
+          console.info('What password is? :', inputValue.password);
           break;
         case 'registration':
-          console.log('What we do now? :', name);
-          console.log('What mail of user is? :', inputValue.email);
-          console.log('What password is? :', inputValue.password);
+          console.info('What we do now? :', name);
+          console.info('What mail of user is? :', inputValue.email);
+          console.info('What password is? :', inputValue.password);
           break;
+        default:
+          console.info('something whent wrong');
       }
     },
     [inputValue],
   );
-  console.log(inputValue.password);
   return (
     <div className={s.containerLogin}>
       <h1 className={s.textLogin}>
         Want to be on safe? Please, log in or register
       </h1>
       <form className={s.formContainer}>
-        <label htmlFor="email">Email </label>
-        <input
-          type="email"
+        <Input
+          inputChangeHandler={inputChangeHandler}
           name="email"
-          id="email"
           value={inputValue.email}
-          onChange={inputChangeHandler}
         />
-        <label htmlFor="password">Password </label>
-        <input
-          type="password"
+        <Input
+          inputChangeHandler={inputChangeHandler}
           name="password"
-          id="password"
           value={inputValue.password}
-          onChange={inputChangeHandler}
         />
-        <div className={s.wrapperForButtonLogin}>
-          <button type="submit" name="logIn" onClick={btnLoginHandler}>
-            Log in
-          </button>
-          <button type="submit" name="registration" onClick={btnLoginHandler}>
-            Registration
-          </button>
-        </div>
+        <Button buttonLoginHandler={buttonLoginHandler} name="logIn" />
+        <Button buttonLoginHandler={buttonLoginHandler} name="registration" />
       </form>
     </div>
   );

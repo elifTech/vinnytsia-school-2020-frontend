@@ -18,8 +18,8 @@ function Chat() {
         <input
           className={s.input}
           onChange={handleChange}
-          value={userInput}
           type="text"
+          value={userInput}
         />
       </div>
     </div>
