@@ -153,6 +153,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'lodash/prefer-lodash-method': ['warn', { ignoreObjects: ['history'] }],
     'react/jsx-no-literals': 'off',
+    'jest/no-large-snapshots': 'off',
   },
 
   settings: {

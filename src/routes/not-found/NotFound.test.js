@@ -1,17 +1,17 @@
+import { render } from 'enzyme';
 import React from 'react';
-import { create } from 'react-test-renderer';
 import NotFound from './NotFound';
 
 describe('dashboard route', () => {
   it('matches the snapshot', () => {
     expect.assertions(1);
-    const link = create(<NotFound title="Page Not Found" />);
-    expect(link.toJSON()).toMatchInlineSnapshot(`
+    const link = render(<NotFound title="Page Not Found" />);
+    expect(link).toMatchInlineSnapshot(`
       <div
-        className="root"
+        class="root"
       >
         <div
-          className="container"
+          class="container"
         >
           <h1>
             Page Not Found
