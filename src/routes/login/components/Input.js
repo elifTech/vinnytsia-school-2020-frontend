@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import replace from 'lodash/replace';
-import upperCase from 'lodash/upperCase';
+import capitalize from 'lodash/capitalize';
 
 export default function Input({ name, inputChangeHandler, value }) {
   return (
     <label htmlFor={name}>
-      <span>{replace(name, name[0], upperCase(name[0]))}</span>
+      <span>{capitalize(name)}</span>
       <input
         id={name}
         name={name}

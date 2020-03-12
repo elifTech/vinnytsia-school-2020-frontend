@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './Login';
-import Layout from '../../components/Layout/Layout';
+import Layout from '../../components/Layout';
 
 export default function action() {
   return {

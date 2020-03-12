@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import replace from 'lodash/replace';
-import upperCase from 'lodash/upperCase';
+import capitalize from 'lodash/capitalize';
 
-export default function Button({ name, buttonLoginHandler }) {
+export default function LoginButton({ name, buttonLoginHandler }) {
   return (
     <button name={name} onClick={buttonLoginHandler} type="submit">
-      {replace(name, name[0], upperCase(name[0]))}
+      {capitalize(name)}
     </button>
   );
 }
-Button.propTypes = {
+LoginButton.propTypes = {
   buttonLoginHandler: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
 };

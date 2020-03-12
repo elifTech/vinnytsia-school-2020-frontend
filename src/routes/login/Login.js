@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import s from './Login.css';
 import Input from './components/Input';
-import Button from './components/Button';
+import LoginButton from './components/LoginButton';
 
 function Login() {
   const [inputValue, setInputValue] = useState({
@@ -56,8 +56,11 @@ function Login() {
           name="password"
           value={inputValue.password}
         />
-        <Button buttonLoginHandler={buttonLoginHandler} name="logIn" />
-        <Button buttonLoginHandler={buttonLoginHandler} name="registration" />
+        <LoginButton buttonLoginHandler={buttonLoginHandler} name="logIn" />
+        <LoginButton
+          buttonLoginHandler={buttonLoginHandler}
+          name="registration"
+        />
       </form>
     </div>
   );
