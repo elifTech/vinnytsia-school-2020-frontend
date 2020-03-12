@@ -27,10 +27,9 @@ if (__DEV__) {
 
 // critical path CSS rendering
 function insertCss(...styles) {
-  // eslint-disable-next-line no-underscore-dangle
-  const removeCss = map(styles, x => x && x._insertCss());
+  const removeCss = map(styles, style => invoke(style, '_insertCss'));
   return () => {
-    forEach(removeCss, f => f && f());
+    forEach(removeCss, invoke);
   };
 }
 const styleContextProviderValue = { insertCss };
