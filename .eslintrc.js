@@ -12,6 +12,7 @@ module.exports = {
     'plugin:unicorn/recommended',
     'plugin:array-func/all',
     'plugin:react/all',
+    'plugin:react/recommended',
     'plugin:react-perf/recommended',
     'plugin:lodash/recommended',
     'plugin:eslint-comments/recommended',
@@ -154,6 +155,7 @@ module.exports = {
     'lodash/prefer-lodash-method': ['warn', { ignoreObjects: ['history'] }],
     'react/jsx-no-literals': 'off',
     'jest/no-large-snapshots': 'off',
+    'react/jsx-max-depth': ['error', { max: 5 }],
   },
 
   settings: {
