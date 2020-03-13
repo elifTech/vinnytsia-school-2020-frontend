@@ -1,0 +1,50 @@
+.containerLogin {
+  display: flex;
+  flex-direction: column;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 15px auto;
+  padding: 30px;
+  background: #cecece;
+}
+
+.formContainer label,
+.formContainer button {
+  margin: 10px 0 0;
+}
+
+.formContainer label {
+  display: flex;
+  flex-direction: column;
+}
+
+.formContainer input {
+  height: 30px;
+  padding-left: 15px;
+}
+
+.formContainer button {
+  border: none;
+  border-radius: 5px;
+  height: 25px;
+  background: #eee;
+  margin-right: 10px;
+  outline: none;
+  width: 50%;
+  align-self: center;
+}
+
+.formContainer button:hover {
+  cursor: pointer;
+}
+
+.textLogin {
+  color: #cecece;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
