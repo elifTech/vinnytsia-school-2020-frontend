@@ -28,7 +28,7 @@ export default function fetchData() {
     dispatch(fetchDataStart());
     try {
       const response = await fetch(
-        'http://ws.audioscrobbler.com/2.0/?method=album.gettoptags&api_key=991eacc4ca058d68ec446983c0ddd04d&artist=venom&album=cast%20in%20stone&format=json',
+        '//ws.audioscrobbler.com/2.0/?method=album.gettoptags&api_key=991eacc4ca058d68ec446983c0ddd04d&artist=venom&album=cast%20in%20stone&format=json',
       );
       const data = await response.json();
       return dispatch(fetchDataSuccess(data.toptags));
