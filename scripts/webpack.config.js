@@ -72,6 +72,7 @@ const config = {
           configFile: false,
           plugins: [
             // Experimental ECMAScript proposals
+            '@babel/plugin-transform-runtime',
             '@babel/plugin-proposal-class-properties',
             '@babel/plugin-syntax-dynamic-import',
             // Treat React JSX elements as value types and hoist them to the highest scope

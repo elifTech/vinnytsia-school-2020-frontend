@@ -103,4 +103,7 @@ module.exports = {
   // unmockedModulePathPatterns: // [array<string>]
 
   verbose: true, // [boolean]
+  snapshotSerializers: ['enzyme-to-json/serializer'],
+  coverageReporters: ['text'],
+  setupFilesAfterEnv: ['<rootDir>/setup-tests.js'],
 };

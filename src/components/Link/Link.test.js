@@ -1,7 +1,7 @@
+import { render } from 'enzyme';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { act } from 'react-dom/test-utils';
-import { create } from 'react-test-renderer';
 import Link, { isExternal } from '.';
 
 describe('isExternal', () => {
@@ -20,12 +20,11 @@ describe('isExternal', () => {
 describe('link to google', () => {
   it('matches the snapshot', () => {
     expect.assertions(1);
-    const link = create(<Link to="https://google.com">Google</Link>);
-    expect(link.toJSON()).toMatchInlineSnapshot(`
+    const link = render(<Link to="https://google.com">Google</Link>);
+    expect(link).toMatchInlineSnapshot(`
       <a
-        className=""
+        class=""
         href="https://google.com"
-        onClick={[Function]}
         target="_blank"
       >
         Google
@@ -37,33 +36,31 @@ describe('link to google', () => {
 describe('link to dashboard', () => {
   it('matches the snapshot', () => {
     expect.assertions(1);
-    const link = create(<Link to="/">Home</Link>);
-    expect(link.toJSON()).toMatchInlineSnapshot(`
-<a
-  className=""
-  href="/"
-  onClick={[Function]}
->
-  Home
-</a>
-`);
+    const link = render(<Link to="/">Home</Link>);
+    expect(link).toMatchInlineSnapshot(`
+      <a
+        class=""
+        href="/"
+      >
+        Home
+      </a>
+    `);
   });
   it('accepts className prop', () => {
     expect.assertions(1);
-    const link = create(
+    const link = render(
       <Link className="custom-class" to="/">
         Home
       </Link>,
     );
-    expect(link.toJSON()).toMatchInlineSnapshot(`
-<a
-  className="custom-class"
-  href="/"
-  onClick={[Function]}
->
-  Home
-</a>
-`);
+    expect(link).toMatchInlineSnapshot(`
+      <a
+        class="custom-class"
+        href="/"
+      >
+        Home
+      </a>
+    `);
   });
 });
 describe('link with onClick handler', () => {

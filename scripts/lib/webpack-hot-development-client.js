@@ -1,5 +1,3 @@
-import head from 'lodash/head';
-import invoke from 'lodash/invoke';
 import hotClient from 'webpack-hot-middleware/client';
 import launchEditorEndpoint from 'react-dev-utils/launchEditorEndpoint';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
@@ -30,7 +28,7 @@ hotClient.useCustomOverlay({
       warnings: [],
     });
 
-    reportBuildError(head(formatted.errors));
+    reportBuildError(formatted.errors[0]);
   },
 });
 
@@ -44,5 +42,5 @@ startReportingRuntimeErrors({
 });
 
 if (module.hot) {
-  invoke(module, 'hot.dispose', stopReportingRuntimeErrors);
+  module.hot.dispose(stopReportingRuntimeErrors);
 }

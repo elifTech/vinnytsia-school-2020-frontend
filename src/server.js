@@ -21,6 +21,7 @@ import router from './router';
 import chunks from './chunk-manifest.json'; // eslint-disable-line import/no-unresolved
 import config from './config';
 import configureStore from './store/configure-store';
+import initialState from './initial-state.json';
 
 function getCss() {
   const css = new Set();
@@ -74,7 +75,6 @@ app.use(compression());
 app.get('*', async (request, response, next) => {
   try {
     const [css, insertCss] = getCss();
-    const initialState = {};
 
     const store = configureStore(initialState, {
       fetch: nodeFetch,

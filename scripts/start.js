@@ -2,12 +2,9 @@ import browserSync from 'browser-sync';
 import express from 'express';
 import find from 'lodash/find';
 import forEach from 'lodash/forEach';
-import get from 'lodash/get';
 import includes from 'lodash/includes';
-import invoke from 'lodash/invoke';
 import lodashReject from 'lodash/reject';
 import replace from 'lodash/replace';
-import set from 'lodash/set';
 import path from 'path';
 import errorOverlayMiddleware from 'react-dev-utils/errorOverlayMiddleware';
 import webpack from 'webpack';
@@ -31,16 +28,16 @@ const watchOptions = {
 function createCompilationPromise(name, compiler, config) {
   return new Promise((resolve, reject) => {
     let timeStart = new Date();
-    invoke(compiler, 'hooks.compile.tap', name, () => {
+    compiler.hooks.compile.tap(name, () => {
       timeStart = new Date();
       console.info(`[${format(timeStart)}] Compiling '${name}'...`);
     });
 
-    invoke(compiler, 'hooks.done.tap', name, stats => {
-      console.info(invoke(stats, 'toString', config.stats));
+    compiler.hooks.done.tap(name, stats => {
+      console.info(stats.toString(config.stats));
       const timeEnd = new Date();
       const time = timeEnd.getTime() - timeStart.getTime();
-      if (invoke(stats, 'hasErrors')) {
+      if (stats.hasErrors()) {
         console.info(
           `[${format(timeEnd)}] Failed to compile '${name}' after ${time} ms`,
         );
@@ -71,56 +68,35 @@ async function start() {
 
   // Configure client-side hot module replacement
   const clientConfig = find(webpackConfig, ['name', 'client']);
-  set(
-    clientConfig,
-    'entry.client',
-    ['./scripts/lib/webpack-hot-development-client']
-      .concat(get(clientConfig, 'entry.client'))
-      .sort((a, b) => includes(b, 'polyfill') - includes(a, 'polyfill')),
+  clientConfig.entry.client = ['./scripts/lib/webpack-hot-development-client']
+    .concat(clientConfig.entry.client)
+    .sort((a, b) => includes(b, 'polyfill') - includes(a, 'polyfill'));
+  clientConfig.output.filename = replace(
+    clientConfig.output.filename,
+    'chunkhash',
+    'hash',
   );
-  set(
-    clientConfig,
-    'output.filename',
-    replace(get(clientConfig, 'output.filename'), 'chunkhash', 'hash'),
+  clientConfig.output.chunkFilename = replace(
+    clientConfig.output.chunkFilename,
+    'chunkhash',
+    'hash',
   );
-  set(
-    clientConfig,
-    'output.chunkFilename',
-    replace(get(clientConfig, 'output.chunkFilename'), 'chunkhash', 'hash'),
-  );
-  set(
-    clientConfig,
-    'module.rules',
-    lodashReject(get(clientConfig, 'module.rules'), ['loader', 'null-loader']),
-  );
-  invoke(
-    clientConfig,
-    'plugins.push',
-    new webpack.HotModuleReplacementPlugin(),
-  );
+  clientConfig.module.rules = lodashReject(clientConfig.module.rules, [
+    'loader',
+    'null-loader',
+  ]);
+  clientConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 
   // Configure server-side hot module replacement
   const serverConfig = find(webpackConfig, ['name', 'server']);
-  set(
-    serverConfig,
-    'output.hotUpdateMainFilename',
-    'updates/[hash].hot-update.json',
-  );
-  set(
-    serverConfig,
-    'output.hotUpdateChunkFilename',
-    'updates/[id].[hash].hot-update.js',
-  );
-  set(
-    serverConfig,
-    'module.rules',
-    lodashReject(get(serverConfig, 'module.rules'), ['loader', 'null-loader']),
-  );
-  invoke(
-    serverConfig,
-    'plugins.push',
-    new webpack.HotModuleReplacementPlugin(),
-  );
+  serverConfig.output.hotUpdateMainFilename = 'updates/[hash].hot-update.json';
+  serverConfig.output.hotUpdateChunkFilename =
+    'updates/[id].[hash].hot-update.js';
+  serverConfig.module.rules = lodashReject(serverConfig.module.rules, [
+    'loader',
+    'null-loader',
+  ]);
+  serverConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
 
   // Configure compilation
   await run(clean);
@@ -142,7 +118,7 @@ async function start() {
   server.use(
     webpackDevMiddleware(clientCompiler, {
       logLevel: 'silent',
-      publicPath: get(clientConfig, 'output.publicPath'),
+      publicPath: clientConfig.output.publicPath,
       watchOptions,
     }),
   );
@@ -153,7 +129,7 @@ async function start() {
   let appPromise;
   let appPromiseResolve;
   let appPromiseIsResolved = true;
-  invoke(serverCompiler, 'hooks.compile.tap', 'server', () => {
+  serverCompiler.hooks.compile.tap('server', () => {
     if (!appPromiseIsResolved) return;
     appPromiseIsResolved = false;
     // eslint-disable-next-line no-return-assign
@@ -175,16 +151,16 @@ async function start() {
     if (!app.hot) {
       throw new Error(`${hmrPrefix}Hot Module Replacement is disabled.`);
     }
-    if (invoke(app, 'hot.status') !== 'idle') {
+    if (app.hot.status() !== 'idle') {
       return Promise.resolve();
     }
     try {
-      const updatedModules = await invoke(app, 'hot.check', true);
+      const updatedModules = await app.hot.check(true);
       if (!updatedModules) {
         if (fromUpdate) {
           console.info(`${hmrPrefix}Update applied.`);
         }
-        return Promise.resolve();
+        return undefined;
       }
       if (updatedModules.length === 0) {
         console.info(`${hmrPrefix}Nothing hot updated.`);
@@ -196,7 +172,7 @@ async function start() {
         checkForUpdate(true);
       }
     } catch (error) {
-      if (includes(['abort', 'fail'], invoke(app, 'hot.status'))) {
+      if (includes(['abort', 'fail'], app.hot.status())) {
         console.warn(`${hmrPrefix}Cannot apply update.`);
         delete require.cache[require.resolve('../build/server')];
         // eslint-disable-next-line global-require, import/no-unresolved
@@ -208,11 +184,11 @@ async function start() {
         );
       }
     }
-    return Promise.resolve();
+    return undefined;
   }
 
-  invoke(serverCompiler, 'watch', watchOptions, async (error, stats) => {
-    if (app && !error && !invoke(stats, 'hasErrors')) {
+  serverCompiler.watch(watchOptions, async (error, stats) => {
+    if (app && !error && !stats.hasErrors()) {
       await checkForUpdate();
       appPromiseIsResolved = true;
       appPromiseResolve();
