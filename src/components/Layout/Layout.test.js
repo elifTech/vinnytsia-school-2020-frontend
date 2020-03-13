@@ -11,7 +11,9 @@ describe('layout', () => {
       </Layout>,
     );
     expect(link).toMatchInlineSnapshot(`
-      <div>
+      <div
+        class="container-fluid"
+      >
         <h1>
           Hello!
         </h1>
