@@ -1,0 +1,70 @@
+.message {
+  height: 100%;
+}
+
+.message .content {
+  display: flex;
+  max-width: 440px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.message .bubble {
+  background: #c4cdbd;
+  box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+  border-radius: 12px 12px 12px 0;
+  padding: 15px;
+  margin-bottom: 8px;
+}
+
+.message .avatar {
+  border-radius: 50%;
+  width: 60px;
+  height: 100%;
+}
+
+.message .bubbleText {
+  color: #000;
+  line-height: 20px;
+}
+
+.message .date {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.isMe {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.isMe .content {
+  display: flex;
+  max-width: 440px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.isMe .bubble {
+  background: limegreen;
+  box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+  border-radius: 12px 12px 12px 0;
+  padding: 15px;
+  margin-bottom: 8px;
+}
+
+.isMe .avatar {
+  border-radius: 50%;
+  width: 60px;
+  height: 100%;
+}
+
+.isMe .bubbleText {
+  color: #fff;
+  line-height: 20px;
+}
+
+.isMe .date {
+  font-size: 12px;
+  opacity: 0.5;
+}
