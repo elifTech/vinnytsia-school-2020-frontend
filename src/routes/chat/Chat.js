@@ -1,25 +1,41 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/withStyles';
+import { useDispatch } from 'react-redux';
 
 import Messages from './components/messages';
 import ChatInput from './components/chatInput';
+import {
+  chatAddMessage,
+  chatMessageIsLoading,
+  // chatRemoveMessage,
+  fetchMessages,
+} from '../../actions/security-chat';
 
 import messages from './testData.json';
 
 import s from './Chat.css';
 
 function Chat() {
-  const [userInput, setUserInput] = useState('');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    fetchMessages();
+  }, [dispatch]);
+  const initialState = '';
+  const [userInput, setUserInput] = useState(initialState);
   const handleChange = useCallback(event => {
     console.info(event.target.value);
     setUserInput(get(event, 'target.value'));
+    dispatch(chatMessageIsLoading(true));
   }, []);
   const sendUserMessage = useCallback(
     event => {
       event.preventDefault();
+      // const newValue = parseInt(get(event, 'target.value'));
       console.info('Text', userInput);
+      dispatch(chatAddMessage(userInput));
+      return setUserInput(initialState);
     },
     [userInput],
   );

@@ -23,18 +23,3 @@ function Messages(itemstest) {
 }
 
 export default Messages;
-
-// {items.length > 0 &&
-// map(item => {
-//   // console.info(item);
-//   return (
-//     <Message
-//       key={item.id}
-//       createdAt={item.created_at}
-//       isMe={false}
-//       text={item.text}
-//       user={item.user}
-//     />
-//   );
-// })}
-//
