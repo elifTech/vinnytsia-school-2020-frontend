@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import get from 'lodash/get';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import s from './Chat.css';
 
 function Chat() {
+  useStyles(s);
   const [userInput, setUserInput] = useState('');
   const handleChange = useCallback(event => {
     console.info(event.target.value);
@@ -33,4 +34,4 @@ Chat.defaultProps = {
   name: '',
 };
 
-export default withStyles(s)(React.memo(Chat));
+export default memo(Chat);

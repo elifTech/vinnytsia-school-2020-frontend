@@ -1,4 +1,4 @@
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import startsWith from 'lodash/startsWith';
 import PropTypes from 'prop-types';
 import React, { memo, useCallback } from 'react';
@@ -21,6 +21,7 @@ export function isExternal(to) {
 }
 
 function Link(props) {
+  useStyles(style);
   const { children, className, onClick, to } = props;
   const handleClick = useCallback(
     event => {
@@ -67,4 +68,4 @@ Link.defaultProps = {
 };
 Link.whyDidYouRender = true;
 
-export default withStyles(style)(memo(Link));
+export default memo(Link);
