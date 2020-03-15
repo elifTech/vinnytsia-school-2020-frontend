@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import s from './ErrorPage.css';
 
 function ErrorPage(props) {
+  useStyles(s);
   const { error } = props;
   if (__DEV__ && error) {
     return (
@@ -34,4 +35,4 @@ ErrorPage.defaultProps = {
 };
 ErrorPage.whyDidYouRender = true;
 export { ErrorPage as ErrorPageWithoutStyle };
-export default withStyles(s)(React.memo(ErrorPage));
+export default memo(ErrorPage);

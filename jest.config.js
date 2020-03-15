@@ -63,8 +63,7 @@ module.exports = {
   // like images or styles with a single module.
   moduleNameMapper: {
     '\\.(css|less|styl|scss|sass|sss)$': 'identity-obj-proxy',
-    'isomorphic-style-loader/withStyles':
-      '<rootDir>/scripts/mocks/with-styles.js',
+    'isomorphic-style-loader/useStyles': 'lodash/noop',
     '^.+\\.(jpg|jpeg|gif|png|mp4|mkv|avi|webm|swf|wav|mid)$':
       'jest-static-stubs/$1',
   },

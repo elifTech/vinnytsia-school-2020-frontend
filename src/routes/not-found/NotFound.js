@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import s from './NotFound.css';
 
 function NotFound(props) {
+  useStyles(s);
   const { title } = props;
   return (
     <div className={s.root}>
@@ -18,4 +19,4 @@ NotFound.propTypes = {
   title: PropTypes.string.isRequired,
 };
 NotFound.whyDidYouRender = true;
-export default withStyles(s)(React.memo(NotFound));
+export default memo(NotFound);
