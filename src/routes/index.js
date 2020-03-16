@@ -33,7 +33,7 @@ const routes = [
       {
         load: () =>
           import(
-            /* webpackChunkName: 'movement-sensors' */ './movement-sensors'
+            /* webpackChunkName: 'movement-detection' */ './movement-detection'
           ),
         path: '/sensors',
       },

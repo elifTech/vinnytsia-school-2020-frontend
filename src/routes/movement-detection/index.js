@@ -4,12 +4,12 @@ import Layout from '../../components/Layout/Layout';
 
 export default function action() {
   return {
-    chunks: ['movement-sensors'],
+    chunks: ['movement-detection'],
     component: (
       <Layout>
         <Sensors />
       </Layout>
     ),
-    title: 'Movement sensors',
+    title: 'Movement detection',
   };
 }

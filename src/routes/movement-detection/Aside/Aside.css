@@ -1,11 +1,9 @@
 .Aside {
   display: flex;
   flex-direction: column;
-  background: #eee;
   width: 200px;
   height: 100%;
   overflow: hidden;
-  box-shadow: 3px 3px 4px #aaa;
   padding: 10px 20px;
 }
 

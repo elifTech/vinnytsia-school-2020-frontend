@@ -45,9 +45,9 @@ function Sensors() {
     setSensors([...sensors, { x: 0, y: 0 }]);
   }
   return (
-    <>
+    <div className={s.container}>
       <h1 className={s.title}>Your home</h1>
-      <div className={s.container}>
+      <div className={s.content}>
         <Aside
           addSensor={addSensor}
           cancelHandler={cancelHandler}
@@ -72,7 +72,7 @@ function Sensors() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 export default withStyles(s)(React.memo(Sensors));
