@@ -9,7 +9,7 @@ function Sensors() {
   const [file, setFile] = useState('');
   const [sensors, setSensors] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const [prvState, setPrvState] = useState([]);
+  const [prvState, setPrvState] = useState({ file: '', sensors: [] });
 
   const setData = useCallback(
     (event, ui, i) => {
@@ -20,32 +20,34 @@ function Sensors() {
     [sensors],
   );
 
-  function fileHandler(event) {
+  const fileHandler = useCallback(event => {
     const f = event.target.files[0];
     const fr = new FileReader();
     fr.readAsDataURL(f);
     fr.addEventListener('load', () => {
       setFile(fr.result);
     });
-  }
+  }, []);
 
   function editHandler() {
     setIsEdit(!isEdit);
-    setPrvState(Array.from(sensors));
+    setPrvState({ file, sensors: Array.from(sensors) });
   }
   function saveHandler() {
     setIsEdit(!isEdit);
   }
   function cancelHandler() {
     setIsEdit(!isEdit);
-    setSensors(Array.from(prvState));
+    setSensors(Array.from(prvState.sensors));
+    setFile(prvState.file);
   }
   function addSensor() {
     setSensors([...sensors, { x: 0, y: 0 }]);
   }
   return (
-    <div className={s.container}>
-      <div className={s.mainWrapper}>
+    <>
+      <h1 className={s.title}>Your home</h1>
+      <div className={s.container}>
         <Aside
           addSensor={addSensor}
           cancelHandler={cancelHandler}
@@ -66,11 +68,11 @@ function Sensors() {
             />
           ))}
           <div className={s.imgContainer}>
-            <img alt="house plan" src={file} />
+            {file && <img alt="house plan" src={file} />}
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 export default withStyles(s)(React.memo(Sensors));

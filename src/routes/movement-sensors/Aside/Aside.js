@@ -1,6 +1,7 @@
 import React from 'react';
 import withStyle from 'isomorphic-style-loader/withStyles';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import s from './Aside.css';
 
 function Aside({
@@ -12,16 +13,23 @@ function Aside({
   cancelHandler,
   editHandler,
 }) {
-  const classes = ['btn', 'btn-primary'];
   return (
-    <aside className={s.Aside}>
+    <aside className={classNames(s.Aside, 'btn-group-vertical')}>
       {isEdit ? (
         <>
-          <button disabled={!file} onClick={addSensor} type="button">
+          <button
+            className={classNames('btn', 'btn-primary')}
+            disabled={!file}
+            onClick={addSensor}
+            type="button"
+          >
             Add Sensor
           </button>
-          <label className={s.addFile} htmlFor="addfile">
-            Add file
+          <label
+            className={classNames(s.addFile, 'btn', 'btn-primary')}
+            htmlFor="addfile"
+          >
+            Add plan
             <input
               accept="image/*"
               id="addfile"
@@ -29,16 +37,24 @@ function Aside({
               type="file"
             />
           </label>
-          <button onClick={saveHandler} type="button">
+          <button
+            className={classNames('btn', 'btn-success')}
+            onClick={saveHandler}
+            type="button"
+          >
             Save
           </button>
-          <button onClick={cancelHandler} type="button">
+          <button
+            className={classNames('btn', 'btn-danger')}
+            onClick={cancelHandler}
+            type="button"
+          >
             Cancel
           </button>
         </>
       ) : (
         <button
-          className={classes.join(' ')}
+          className={classNames('btn', 'btn-primary')}
           onClick={editHandler}
           type="button"
         >

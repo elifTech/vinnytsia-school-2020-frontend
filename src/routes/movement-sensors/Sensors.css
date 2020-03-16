@@ -1,18 +1,18 @@
 @import '../../components/variables.css';
 
-.container {
-  width: var(--max-content-width);
-  margin: 0 auto;
+.title {
+  background: #009688;
   text-align: center;
-  min-height: 90vh;
-  box-shadow: 2px 2px 3px 1px #ccc;
-  border-radius: 5px;
-  padding: 10px 15px;
 }
 
-.mainWrapper {
+.container {
+  width: 100%;
+  margin: 40px auto;
+  text-align: center;
+  padding-bottom: 15px;
   display: flex;
-  height: 100%;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .imgContainer {
@@ -23,6 +23,8 @@
 }
 
 .main {
-  width: 100%;
+  box-shadow: 2px 1px 4px 1px #ccc;
+  margin: 0 auto;
+  min-width: 1000px;
   height: 100%;
 }

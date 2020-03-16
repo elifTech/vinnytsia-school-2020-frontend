@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import withStyles from 'isomorphic-style-loader/withStyles';
 import Draggable from 'react-draggable';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import s from './Sensor.css';
+import sensorIMG from '../assets/sensor.svg';
 
 function Sensor({ dataHandler, index, sensor, isEdit }) {
+  const [hover, setHover] = useState(false);
   const options = {
     position: sensor,
   };
@@ -19,13 +22,36 @@ function Sensor({ dataHandler, index, sensor, isEdit }) {
       bottom: sensor.y + limit,
     };
   }
+  function hoverHandler() {
+    setHover(!hover);
+  }
+  const content =
+    hover && !isEdit ? (
+      <>
+        <p className={s.title}>Sensor №{index + 1}</p>
+        <p>
+          Status: <span className="badge badge-success">OK</span>
+        </p>
+        <p>Last alert: none</p>
+      </>
+    ) : (
+      <img alt="sensor" src={sensorIMG} />
+    );
+  const classes =
+    hover && !isEdit ? classNames(s.Sensor, s.SensorInfo) : s.Sensor;
   return (
     <Draggable
       bounds={options.bounds}
       onDrag={options.handleOnDrag}
       position={options.position}
     >
-      <div className={s.Sensor} />
+      <div
+        className={classes}
+        onMouseEnter={hoverHandler}
+        onMouseLeave={hoverHandler}
+      >
+        {content}
+      </div>
     </Draggable>
   );
 }
