@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import property from 'lodash/property';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Messages from './components/messages';
@@ -20,6 +20,7 @@ import s from './Chat.css';
 const testUserId = '1';
 
 function Chat() {
+  useStyles(s);
   const dispatch = useDispatch();
   const messages = useSelector(property('chat.messages'));
   // console.info(messages);
@@ -85,4 +86,4 @@ Chat.defaultProps = {
   Messages: {},
 };
 
-export default withStyles(s)(React.memo(Chat));
+export default memo(Chat);

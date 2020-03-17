@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import property from 'lodash/property';
 import times from 'lodash/times';
-import React, { useEffect, useCallback, useMemo } from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import React, { memo, useCallback, useEffect, useMemo } from 'react';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import isNaN from 'lodash/isNaN';
 import sum from 'lodash/sum';
@@ -16,6 +16,7 @@ import {
 } from '../../actions/calc-table';
 
 function Dashboard() {
+  useStyles(s);
   const dispatch = useDispatch();
   const table = useSelector(property('calcTable.table'));
   const numberOfRows =
@@ -82,4 +83,4 @@ function Dashboard() {
 }
 
 Dashboard.whyDidYouRender = true;
-export default withStyles(s)(React.memo(Dashboard));
+export default memo(Dashboard);

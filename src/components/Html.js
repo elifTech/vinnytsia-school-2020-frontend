@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
-import React, { useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import serialize from 'serialize-javascript';
 import config from '../config';
 import Style from './Style';
@@ -85,4 +85,4 @@ Html.defaultProps = {
   styles: [],
 };
 Html.whyDidYouRender = true;
-export default React.memo(Html);
+export default memo(Html);
