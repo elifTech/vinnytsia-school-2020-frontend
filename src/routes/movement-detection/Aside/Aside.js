@@ -75,4 +75,5 @@ Aside.propTypes = {
   saveHandler: PropTypes.func.isRequired,
 };
 
+Aside.whyDidYouRender = true;
 export default withStyle(s)(React.memo(Aside));

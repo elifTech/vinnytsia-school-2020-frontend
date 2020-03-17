@@ -75,4 +75,6 @@ function Sensors() {
     </div>
   );
 }
+
+Sensors.whyDidYouRender = true;
 export default withStyles(s)(React.memo(Sensors));

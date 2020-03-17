@@ -64,4 +64,6 @@ Sensor.propTypes = {
     y: PropTypes.number,
   }).isRequired,
 };
+
+Sensor.whyDidYouRender = true;
 export default withStyles(s)(React.memo(Sensor));
