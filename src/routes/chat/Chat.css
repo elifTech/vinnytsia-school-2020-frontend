@@ -20,10 +20,15 @@
   margin: auto;
 }
 
+.chatContainer .messagesContent {
+  height: 790px;
+}
+
 .chatContainer .messages {
   height: 100%;
   margin: 0 auto;
   padding: 10px;
+  padding-bottom: 0;
   overflow: auto;
   border: 1px solid #f7f7f7;
 }

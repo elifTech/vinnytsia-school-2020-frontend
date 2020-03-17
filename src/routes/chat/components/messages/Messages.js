@@ -1,18 +1,23 @@
 import React from 'react';
 import map from 'lodash/map';
+import PropTypes from 'prop-types';
+import size from 'lodash/size';
+
 import Message from '../message';
 
-function Messages(itemstest) {
-  const { items } = itemstest;
+const testValueIsMe = true;
+
+function Messages({ items }) {
+  // console.info('In messages', items);
   return (
     <div>
-      {items.length > 0 &&
+      {size(items) > 0 &&
         map(items, item => {
           return (
             <Message
               key={item.id}
-              createdAt={item.created_at}
-              isMe={false}
+              createdAt={item.createdAt}
+              isMe={testValueIsMe}
               text={item.text}
               user={item.user}
             />
@@ -21,5 +26,12 @@ function Messages(itemstest) {
     </div>
   );
 }
+
+Messages.propTypes = {
+  items: PropTypes.shape([]),
+};
+Messages.defaultProps = {
+  items: [],
+};
 
 export default Messages;

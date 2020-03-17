@@ -1,50 +1,72 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
+import property from 'lodash/property';
 import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/withStyles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Messages from './components/messages';
 import ChatInput from './components/chatInput';
 import {
   chatAddMessage,
   chatMessageIsLoading,
-  // chatRemoveMessage,
   fetchMessages,
 } from '../../actions/security-chat';
-
-import messages from './testData.json';
+import socket from '../../utils/socket';
+// import testData from './testData.json';
 
 import s from './Chat.css';
 
+const testUserId = '1';
+
 function Chat() {
   const dispatch = useDispatch();
+  const messages = useSelector(property('chat.messages'));
+  // console.info(messages);
   useEffect(() => {
-    fetchMessages();
+    dispatch(fetchMessages());
+    socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
+      dispatch(fetchMessages());
+    });
   }, [dispatch]);
   const initialState = '';
   const [userInput, setUserInput] = useState(initialState);
-  const handleChange = useCallback(event => {
-    console.info(event.target.value);
-    setUserInput(get(event, 'target.value'));
-    dispatch(chatMessageIsLoading(true));
-  }, []);
+  const handleChange = useCallback(
+    event => {
+      socket.emit('CHAT:TYPING', testUserId);
+      // console.info(event.target.value);
+      setUserInput(get(event, 'target.value'));
+      dispatch(chatMessageIsLoading(true));
+    },
+    [dispatch],
+  );
+
   const sendUserMessage = useCallback(
     event => {
       event.preventDefault();
-      // const newValue = parseInt(get(event, 'target.value'));
-      console.info('Text', userInput);
-      dispatch(chatAddMessage(userInput));
+      const newMessage = {
+        user: testUserId,
+        text: userInput,
+      };
+      // console.info('Text', newMessage);
+      socket.emit('SERVER:NEW_MESSAGE', newMessage);
+      dispatch(chatAddMessage(newMessage));
       return setUserInput(initialState);
     },
-    [userInput],
+    [dispatch, userInput],
   );
   return (
     <div className={s.chatContainer}>
       <div className={s.content}>
         <div className={s.header}>Security Chat</div>
-        <div className={s.messages}>
-          <Messages items={messages} />
+        <div className={s.messagesContent}>
+          <div className={s.messages}>
+            {!messages || null || undefined ? (
+              <span>LOADING</span>
+            ) : (
+              <Messages items={messages} />
+            )}
+          </div>
         </div>
         <ChatInput
           handleChange={handleChange}

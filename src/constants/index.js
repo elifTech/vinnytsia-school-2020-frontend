@@ -1,5 +1,5 @@
 export const SET_RUNTIME_VARIABLE = 'SET_RUNTIME_VARIABLE';
-export const apiURL = 'http://localhost:8080';
+export const apiURL = 'http://localhost:8080/api';
 
 export const CHANGE_CELL_VALUE = 'CHANGE_CELL_VALUE';
 
@@ -10,6 +10,7 @@ export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
 export const CHANGE_NUM_OF_COLUMNS = 'CHANGE_NUM_OF_COLUMNS';
 export const CHANGE_NUM_OF_ROWS = 'CHANGE_NUM_OF_ROWS';
 
+export const GET_ALL_MESSAGES = 'GET_ALL_MESSAGES';
 export const CHAT_ADD_MESSAGE = 'CHAT_ADD_MESSAGE';
 export const CHAT_MESSAGE_IS_TYPING = 'CHAT_MESSAGE_IS_TYPING';
 export const CHAT_REMOVE_MESSAGE = 'CHAT_REMOVE_MESSAGE';
