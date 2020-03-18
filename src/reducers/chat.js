@@ -6,6 +6,7 @@ import {
 } from '../constants';
 
 export default function chat(state = {}, action) {
+  const { messages } = state;
   switch (action.type) {
     case GET_ALL_MESSAGES:
       return {
@@ -16,7 +17,7 @@ export default function chat(state = {}, action) {
     case CHAT_ADD_MESSAGE:
       return {
         ...state,
-        newMessage: action.message,
+        messages: [...messages, action.message],
         isTyping: false,
       };
     case CHAT_MESSAGE_IS_TYPING:

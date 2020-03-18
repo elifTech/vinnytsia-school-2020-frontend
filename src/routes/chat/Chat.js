@@ -1,6 +1,7 @@
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import property from 'lodash/property';
+import isEmpty from 'lodash/isEmpty';
 // import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -60,7 +61,7 @@ function Chat() {
         <div className={s.header}>Security Chat</div>
         <div className={s.messagesContent}>
           <div className={s.messages}>
-            {!messages || null || undefined ? (
+            {isEmpty(messages) ? (
               <span>LOADING</span>
             ) : (
               <Messages items={messages} />

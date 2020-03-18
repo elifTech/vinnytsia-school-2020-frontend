@@ -34,7 +34,7 @@ function Message({ isMe, createdAt, text, user }) {
               src="https://googleretailtraining.exceedlms.com/assets/student/google/default_avatar-5298a7fcd9a9a0ce0d2b32e9aa826a32cc521cb5249540190792626b75504b39.png"
             />
             <div
-              className={classNames(`${s.bubble}`, {
+              className={classNames(s.bubble, {
                 [s.bubbleIsMe]: isMe,
               })}
             >
