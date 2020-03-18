@@ -20,7 +20,7 @@ function Message({ isMe, createdAt, text, user }) {
     >
       <div className={s.message}>
         <span
-          className={classNames('', {
+          className={classNames({
             [s.fullname]: isMe,
           })}
         >
@@ -58,7 +58,7 @@ function Message({ isMe, createdAt, text, user }) {
 Message.defaultProps = {
   createdAt: null,
   isMe: false,
-  text: PropTypes.string,
+  text: null,
   user: {},
 };
 
