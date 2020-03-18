@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 
 import s from './ChatInput.css';
 
 function ChatInput({ handleChange, userInput, sendUserMessage }) {
+  useStyles(s);
   return (
     <form className={s.chatInput} onSubmit={sendUserMessage}>
       <input onChange={handleChange} type="text" value={userInput} />
@@ -30,4 +31,4 @@ ChatInput.defaultProps = {
   userInput: '',
 };
 
-export default withStyles(s)(ChatInput);
+export default memo(ChatInput);

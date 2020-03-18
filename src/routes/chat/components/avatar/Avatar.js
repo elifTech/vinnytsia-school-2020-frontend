@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import toUpper from 'lodash/toUpper';
 
 import s from './Avatar.css';
 
 function Avatar({ user }) {
+  useStyles(s);
   if (user.avatar) {
     return (
       <img
@@ -20,14 +21,14 @@ function Avatar({ user }) {
 }
 
 Avatar.defaultProps = {
-  fullname: 'someone',
   user: {},
 };
 
 Avatar.propTypes = {
-  fullname: PropTypes.string,
-  // eslint-disable-next-line react/forbid-prop-types
-  user: PropTypes.object,
+  user: PropTypes.shape({
+    avatar: PropTypes.string,
+    fullname: PropTypes.string,
+  }),
 };
 
-export default withStyles(s)(Avatar);
+export default memo(Avatar);

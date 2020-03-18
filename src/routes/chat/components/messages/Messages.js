@@ -1,17 +1,17 @@
 import React from 'react';
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
-import size from 'lodash/size';
+import isEmpty from 'lodash/isEmpty';
 
 import Message from '../message';
 
 const testValueIsMe = true;
 
 function Messages({ items }) {
-  // console.info('In messages', items);
+  console.info('In messages', items);
   return (
     <div>
-      {size(items) > 0 &&
+      {!isEmpty(items) &&
         map(items, item => {
           return (
             <Message
@@ -28,7 +28,16 @@ function Messages({ items }) {
 }
 
 Messages.propTypes = {
-  items: PropTypes.shape([]),
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      attachment: PropTypes.object,
+      createdAt: PropTypes.string,
+      id: PropTypes.number,
+      text: PropTypes.string,
+      updatedAt: PropTypes.string,
+      user: PropTypes.object,
+    }),
+  ),
 };
 Messages.defaultProps = {
   items: [],

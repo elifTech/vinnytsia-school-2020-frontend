@@ -1,15 +1,17 @@
-import React from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import React, { memo } from 'react';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+// After creating user model will use Avatar component instead <img>
 // import Avatar from '../avatar';
-import IconMessageStatus from '../messageStatus/MessageStatus';
+import IconMessageStatus from '../messageStatus/IconMessageStatus';
 
 import s from './Message.css';
 
-const testIsReaded = true;
+const testIsRead = true;
 
 function Message({ isMe, createdAt, text, user }) {
+  useStyles(s);
   return (
     <div
       className={classNames('message', {
@@ -17,7 +19,13 @@ function Message({ isMe, createdAt, text, user }) {
       })}
     >
       <div className={s.message}>
-        <span>{user.fullname}</span>
+        <span
+          className={classNames('', {
+            [s.fullname]: isMe,
+          })}
+        >
+          {user.fullname}
+        </span>
         <div>
           <div className={s.content}>
             <img
@@ -32,11 +40,7 @@ function Message({ isMe, createdAt, text, user }) {
             >
               <p>{text}</p>
             </div>
-            <IconMessageStatus
-              className={s.messageStatus}
-              isMe={isMe}
-              isReaded={testIsReaded}
-            />
+            <IconMessageStatus isMe={isMe} isRead={testIsRead} />
           </div>
           <span
             className={classNames(`${s.date}`, {
@@ -67,4 +71,4 @@ Message.propTypes = {
   }),
 };
 
-export default withStyles(s)(Message);
+export default memo(Message);

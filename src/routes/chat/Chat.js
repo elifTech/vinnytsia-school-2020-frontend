@@ -1,7 +1,7 @@
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import property from 'lodash/property';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,10 +9,11 @@ import Messages from './components/messages';
 import ChatInput from './components/chatInput';
 import {
   chatAddMessage,
-  chatMessageIsLoading,
+  chatMessageIsTyping,
   fetchMessages,
 } from '../../actions/security-chat';
 import socket from '../../utils/socket';
+// Without api need to use testData instead messages in <Messages> component
 // import testData from './testData.json';
 
 import s from './Chat.css';
@@ -23,7 +24,6 @@ function Chat() {
   useStyles(s);
   const dispatch = useDispatch();
   const messages = useSelector(property('chat.messages'));
-  // console.info(messages);
   useEffect(() => {
     dispatch(fetchMessages());
     socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
@@ -35,9 +35,8 @@ function Chat() {
   const handleChange = useCallback(
     event => {
       socket.emit('CHAT:TYPING', testUserId);
-      // console.info(event.target.value);
       setUserInput(get(event, 'target.value'));
-      dispatch(chatMessageIsLoading(true));
+      dispatch(chatMessageIsTyping(true));
     },
     [dispatch],
   );
@@ -49,7 +48,6 @@ function Chat() {
         user: testUserId,
         text: userInput,
       };
-      // console.info('Text', newMessage);
       socket.emit('SERVER:NEW_MESSAGE', newMessage);
       dispatch(chatAddMessage(newMessage));
       return setUserInput(initialState);
@@ -79,11 +77,8 @@ function Chat() {
   );
 }
 Chat.whyDidYouRender = true;
-Chat.prototype = {
-  Messages: PropTypes.object,
-};
 Chat.defaultProps = {
-  Messages: {},
+  messages: [],
 };
 
 export default memo(Chat);

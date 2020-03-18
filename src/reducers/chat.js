@@ -1,4 +1,3 @@
-// import get from 'lodash/get';
 import {
   GET_ALL_MESSAGES,
   CHAT_ADD_MESSAGE,
@@ -6,17 +5,9 @@ import {
   // CHAT_REMOVE_MESSAGE,
 } from '../constants';
 
-// const initialState = {
-//   messages: [],
-//   isTyping: false,
-// };
-
 export default function chat(state = {}, action) {
-  // let newValue = action;
-  // let messages = get(state, 'messages', []);
   switch (action.type) {
     case GET_ALL_MESSAGES:
-      // messages = Array.from(messages);
       return {
         ...state,
         messages: action.items,
@@ -25,19 +16,18 @@ export default function chat(state = {}, action) {
     case CHAT_ADD_MESSAGE:
       return {
         ...state,
-        newMessage: action.payload,
+        newMessage: action.message,
         isTyping: false,
       };
     case CHAT_MESSAGE_IS_TYPING:
       return {
         ...state,
-        // messages: null,
-        isTyping: action.payload,
+        isTyping: action.isTyping,
       };
     // case CHAT_REMOVE_MESSAGE:
     //   return {
     //     ...state,
-    //     items: payload,
+    //     messageId: id,
     //   };
     default:
       return state;

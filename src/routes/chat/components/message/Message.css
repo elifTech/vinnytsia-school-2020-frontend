@@ -42,6 +42,11 @@
   flex-direction: row-reverse;
 }
 
+.isMe .fullname {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
 .isMe .content {
   display: flex;
   max-width: 440px;
@@ -78,9 +83,4 @@
   opacity: 0.5;
   flex-direction: row-reverse;
   margin-right: 63px;
-}
-
-.isMe .messageStatus {
-  top: auto;
-  margin-right: 10px;
 }
