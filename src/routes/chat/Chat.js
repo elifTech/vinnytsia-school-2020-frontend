@@ -1,36 +1,82 @@
-import React, { useState, useCallback } from 'react';
+import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
-import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import property from 'lodash/property';
+import isEmpty from 'lodash/isEmpty';
+// import PropTypes from 'prop-types';
+import useStyles from 'isomorphic-style-loader/useStyles';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Messages from './components/messages';
+import ChatInput from './components/chatInput';
+import {
+  chatAddMessage,
+  chatMessageIsTyping,
+  fetchMessages,
+} from '../../actions/security-chat';
+import socket from '../../utils/socket';
+// Without api need to use testData instead messages in <Messages> component
+// import testData from './testData.json';
+
 import s from './Chat.css';
 
+const testUserId = '1';
+
 function Chat() {
-  const [userInput, setUserInput] = useState('');
-  const handleChange = useCallback(event => {
-    console.info(event.target.value);
-    setUserInput(get(event, 'target.value'));
-  }, []);
+  useStyles(s);
+  const dispatch = useDispatch();
+  const messages = useSelector(property('chat.messages'));
+  useEffect(() => {
+    dispatch(fetchMessages());
+    socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
+      dispatch(fetchMessages());
+    });
+  }, [dispatch]);
+  const initialState = '';
+  const [userInput, setUserInput] = useState(initialState);
+  const handleChange = useCallback(
+    event => {
+      socket.emit('CHAT:TYPING', testUserId);
+      setUserInput(get(event, 'target.value'));
+      dispatch(chatMessageIsTyping(true));
+    },
+    [dispatch],
+  );
+
+  const sendUserMessage = useCallback(
+    event => {
+      event.preventDefault();
+      const newMessage = {
+        user: testUserId,
+        text: userInput,
+      };
+      socket.emit('SERVER:NEW_MESSAGE', newMessage);
+      dispatch(chatAddMessage(newMessage));
+      return setUserInput(initialState);
+    },
+    [dispatch, userInput],
+  );
   return (
-    <div className={s.root}>
+    <div className={s.chatContainer}>
       <div className={s.content}>
         <div className={s.header}>Security Chat</div>
-        <div className={s.messages}>Messages</div>
-        <input
-          className={s.input}
-          onChange={handleChange}
-          type="text"
-          value={userInput}
+        <div className={s.messagesContent}>
+          <div className={s.messages}>
+            {isEmpty(messages) ? (
+              <span>LOADING</span>
+            ) : (
+              <Messages items={messages} />
+            )}
+          </div>
+        </div>
+        <ChatInput
+          handleChange={handleChange}
+          sendUserMessage={sendUserMessage}
+          userInput={userInput}
         />
       </div>
     </div>
   );
 }
 Chat.whyDidYouRender = true;
-Chat.prototype = {
-  name: PropTypes.string,
-};
-Chat.defaultProps = {
-  name: '',
-};
 
-export default withStyles(s)(React.memo(Chat));
+export default memo(Chat);

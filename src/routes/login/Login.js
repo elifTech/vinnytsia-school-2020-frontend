@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import React, { memo, useCallback, useState } from 'react';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import s from './Login.css';
 import Input from './components/Input';
 import LoginButton from './components/LoginButton';
 
 function Login() {
+  useStyles(s);
   const [inputValue, setInputValue] = useState({
     password: '',
     email: '',
@@ -66,4 +67,4 @@ function Login() {
   );
 }
 Login.whyDidYouRender = true;
-export default withStyles(s)(React.memo(Login));
+export default memo(Login);

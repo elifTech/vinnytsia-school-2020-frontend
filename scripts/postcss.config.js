@@ -37,10 +37,8 @@ module.exports = () => ({
       stage: 3,
     }),
     includes(process.argv, '--release')
-      ? undefined
-      : // eslint-disable-next-line global-require
-        require('cssnano')({
-          discardComments: { removeAll: true },
-        }),
+      ? // eslint-disable-next-line global-require
+        require('postcss-csso')({ comments: false })
+      : undefined,
   ],
 });

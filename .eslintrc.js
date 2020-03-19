@@ -7,7 +7,7 @@ module.exports = {
   },
   extends: [
     'airbnb',
-    'plugin:css-modules/recommended',
+    'plugin:postcss-modules/recommended',
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
     'plugin:array-func/all',
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   plugins: [
-    'css-modules',
+    'postcss-modules',
     'prettier',
     'promise',
     'unicorn',
