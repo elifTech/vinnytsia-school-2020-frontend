@@ -43,7 +43,7 @@ function Message({ isMe, createdAt, text, user }) {
             <IconMessageStatus isMe={isMe} isRead={testIsRead} />
           </div>
           <span
-            className={classNames(`${s.date}`, {
+            className={classNames(s.date, {
               [s.isMeDate]: isMe,
             })}
           >

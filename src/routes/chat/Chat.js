@@ -78,8 +78,5 @@ function Chat() {
   );
 }
 Chat.whyDidYouRender = true;
-Chat.defaultProps = {
-  messages: [],
-};
 
 export default memo(Chat);

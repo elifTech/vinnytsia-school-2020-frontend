@@ -5,7 +5,7 @@ import {
   // CHAT_REMOVE_MESSAGE,
 } from '../constants';
 
-export default function chat(state = {}, action) {
+export default function chat(state = { messages: [] }, action) {
   const { messages } = state;
   switch (action.type) {
     case GET_ALL_MESSAGES:
