@@ -81,8 +81,7 @@ async function onLocationChange(location, action) {
 
     const renderReactApp = isInitialRender ? ReactDOM.hydrate : ReactDOM.render;
     appInstance = renderReactApp(
-      
-      StyleContext.Provider value={styleContextProviderValue}>
+      <StyleContext.Provider value={styleContextProviderValue}>
         <ReduxProvider store={context.store}>
           <App context={context}>{route.component}</App>
         </ReduxProvider>

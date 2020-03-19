@@ -1,5 +1,5 @@
 import React from 'react';
-import OnlineStatus from './Online-status';
+import OnlineStatus from './online-status';
 import Layout from '../../components/Layout';
 
 export default function action() {
