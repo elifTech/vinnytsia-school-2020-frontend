@@ -18,7 +18,7 @@ import socket from '../../utils/socket';
 
 import s from './Chat.css';
 
-const testUserId = '2';
+const testUserId = '1';
 
 function Chat() {
   useStyles(s);

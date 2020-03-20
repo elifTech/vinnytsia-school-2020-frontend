@@ -1,3 +1,4 @@
+import isEmpty from 'lodash/isEmpty';
 import {
   GET_ALL_MESSAGES,
   CHAT_ADD_MESSAGE,
@@ -17,13 +18,14 @@ export default function chat(state = { messages: [] }, action) {
     case CHAT_ADD_MESSAGE:
       return {
         ...state,
-        messages: [...messages, action.message],
+        messages: isEmpty(messages)
+          ? [action.message]
+          : [...messages, action.message],
         isTyping: false,
       };
     case CHAT_MESSAGE_IS_TYPING:
       return {
         ...state,
-        messages: Array.from(messages),
         isTyping: action.isTyping,
       };
     // case CHAT_REMOVE_MESSAGE:
