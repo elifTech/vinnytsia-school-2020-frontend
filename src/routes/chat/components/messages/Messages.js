@@ -5,7 +5,6 @@ import isEmpty from 'lodash/isEmpty';
 
 import Message from '../message';
 
-// const testValueIsMe = true;
 const testUserId = 1;
 
 function Messages({ items }) {
@@ -14,28 +13,11 @@ function Messages({ items }) {
     <div>
       {!isEmpty(items) &&
         map(items, item => {
-          let isMe = false;
-          let messageUserId = testUserId;
-          const checkUserId = () => {
-            if (!isEmpty(item.userData)) {
-              messageUserId = item.userData.id;
-            }
-            return messageUserId;
-          };
-          checkUserId();
-          const isMeValue = () => {
-            if (testUserId === messageUserId) {
-              isMe = true;
-              return isMe;
-            }
-            return isMe;
-          };
-          isMeValue();
           return (
             <Message
               key={item.id}
               createdAt={item.createdAt}
-              isMe={isMe}
+              currentUserId={testUserId}
               text={item.text}
               user={item.userData}
             />
