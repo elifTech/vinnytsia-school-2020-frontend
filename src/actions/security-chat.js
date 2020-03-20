@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import isEmpty from 'lodash/isEmpty';
 import {
   GET_ALL_MESSAGES,
   CHAT_ADD_MESSAGE,
@@ -24,6 +25,10 @@ function fetchDataFailure(error) {
 
 function fetchMessagesSuccess(items) {
   socket.emit('CHAT:ON', { message: 'Chat is open' });
+  if (isEmpty(items)) {
+    Array.from(items);
+    return items;
+  }
   return {
     items,
     isTyping: false,
@@ -71,7 +76,7 @@ export function fetchMessages() {
     try {
       const response = await fetch('http://localhost:8080/api/messages');
       const data = await response.json();
-      // console.info('Data from fetchMessages', data);
+      // console.info('Data from fetchMessages', data.data);
       return dispatch(fetchMessagesSuccess(data.data));
     } catch (error) {
       return dispatch(fetchDataFailure(error));

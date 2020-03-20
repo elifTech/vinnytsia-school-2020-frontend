@@ -2,8 +2,7 @@ import React, { memo } from 'react';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-// After creating user model will use Avatar component instead <img>
-// import Avatar from '../avatar';
+import Avatar from '../avatar';
 import IconMessageStatus from '../messageStatus/IconMessageStatus';
 
 import s from './Message.css';
@@ -28,11 +27,7 @@ function Message({ isMe, createdAt, text, user }) {
         </span>
         <div>
           <div className={s.content}>
-            <img
-              alt="User"
-              className={s.avatar}
-              src="https://googleretailtraining.exceedlms.com/assets/student/google/default_avatar-5298a7fcd9a9a0ce0d2b32e9aa826a32cc521cb5249540190792626b75504b39.png"
-            />
+            <Avatar user={user} />
             <div
               className={classNames(s.bubble, {
                 [s.bubbleIsMe]: isMe,

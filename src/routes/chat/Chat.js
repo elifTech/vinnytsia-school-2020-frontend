@@ -2,7 +2,6 @@ import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import property from 'lodash/property';
 import isEmpty from 'lodash/isEmpty';
-// import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,7 +18,7 @@ import socket from '../../utils/socket';
 
 import s from './Chat.css';
 
-const testUserId = '1';
+const testUserId = '2';
 
 function Chat() {
   useStyles(s);
@@ -46,7 +45,7 @@ function Chat() {
     event => {
       event.preventDefault();
       const newMessage = {
-        user: testUserId,
+        UserId: testUserId,
         text: userInput,
       };
       socket.emit('SERVER:NEW_MESSAGE', newMessage);

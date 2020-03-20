@@ -18,12 +18,6 @@
   max-width: 400px;
 }
 
-.message .avatar {
-  border-radius: 50%;
-  width: 60px;
-  height: 100%;
-}
-
 .message .bubble p {
   color: #000;
   line-height: 20px;
@@ -55,12 +49,6 @@
   flex-direction: row-reverse;
 }
 
-.isMe .avatar {
-  border-radius: 50%;
-  width: 60px;
-  height: 100%;
-}
-
 .isMe .content .bubbleIsMe {
   background: limegreen;
   box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
@@ -68,6 +56,7 @@
   padding: 15px;
   margin-bottom: 8px;
   margin-left: 5px;
+  margin-right: 5px;
 }
 
 .isMe .content .bubble p {

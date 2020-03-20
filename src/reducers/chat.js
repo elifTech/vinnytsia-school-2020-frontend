@@ -23,6 +23,7 @@ export default function chat(state = { messages: [] }, action) {
     case CHAT_MESSAGE_IS_TYPING:
       return {
         ...state,
+        messages: Array.from(messages),
         isTyping: action.isTyping,
       };
     // case CHAT_REMOVE_MESSAGE:
