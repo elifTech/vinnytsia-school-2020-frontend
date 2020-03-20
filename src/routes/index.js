@@ -30,6 +30,11 @@ const routes = [
         load: () => import(/* webpackChunkName: 'login' */ './login'),
         path: '/login',
       },
+      {
+        load: () =>
+          import(/* webpackChunkName: 'window-sensors' */ './window-sensors'),
+        path: '/window-sensors',
+      },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
