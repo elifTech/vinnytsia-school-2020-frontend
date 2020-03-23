@@ -4,7 +4,7 @@
 
 .message .content {
   display: flex;
-  max-width: 400px;
+  max-width: 800px;
   margin-bottom: 0;
   position: relative;
 }
@@ -15,7 +15,7 @@
   border-radius: 12px 12px 12px 0;
   padding: 15px;
   margin-bottom: 8px;
-  max-width: 400px;
+  max-width: 800px;
 }
 
 .message .bubble p {
@@ -43,7 +43,7 @@
 
 .isMe .content {
   display: flex;
-  max-width: 440px;
+  max-width: 800px;
   margin-bottom: 0;
   position: relative;
   flex-direction: row-reverse;
@@ -72,4 +72,63 @@
   opacity: 0.5;
   flex-direction: row-reverse;
   margin-right: 63px;
+}
+
+.deleteButton {
+  display: none;
+
+  /* margin-left: 10px; */
+
+  /* padding: 10px; */
+
+  /* margin-top: 1px; */
+
+  /* margin-bottom: 1px; */
+  background: #f38b55;
+  height: 30px;
+  width: 30px;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.updateButton {
+  display: none;
+
+  /* margin-left: 10px; */
+
+  /* padding: 10px; */
+
+  /* margin-top: 1px; */
+
+  /* margin-bottom: 1px; */
+  background: #4687f1;
+  height: 30px;
+  width: 30px;
+  font-size: 12px;
+  font-weight: bold;
+  -moz-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.isMe .content:hover .deleteButton {
+  display: block;
+
+  /* position:absolute; */
+  top: 15px;
+  z-index: 9999;
+  width: 50px;
+}
+
+.isMe .content:hover .updateButton {
+  display: block;
+
+  /* position:absolute; */
+  top: 15px;
+  z-index: 9999;
+  width: 50px;
 }

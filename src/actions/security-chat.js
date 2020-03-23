@@ -5,7 +5,9 @@ import {
   CHAT_MESSAGE_IS_TYPING,
   FETCH_DATA_START,
   FETCH_DATA_FAILURE,
-  // CHAT_REMOVE_MESSAGE,
+  CHAT_REMOVE_MESSAGE,
+  CHAT_UPDATE_MESSAGE_BY_ID,
+  EDIT_MESSAGE,
 } from '../constants';
 
 import socket from '../utils/socket';
@@ -38,7 +40,49 @@ async function createMessage(newMessage) {
       headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json(response);
-    console.info('333', result);
+    console.info('Add message', result);
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+async function removeMessage(messageId) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/message/${messageId}`,
+      {
+        method: 'delete',
+        body: JSON.stringify(messageId),
+      },
+    );
+    const result = await response.json(response);
+    console.info('Delete result', result);
+    return result;
+  } catch (error) {
+    return error;
+  }
+}
+export function setCurrentMessage(messageId, text, item) {
+  return {
+    messageId,
+    editMessageText: text,
+    message: item,
+    type: EDIT_MESSAGE,
+  };
+}
+export async function fetchMessageById(messageId) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/message/${messageId}`,
+      {
+        method: 'get',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const result = await response.json(response);
+    console.info('Get by id result', result);
     return result;
   } catch (error) {
     return error;
@@ -59,12 +103,43 @@ export function chatMessageIsTyping(boolean) {
     type: CHAT_MESSAGE_IS_TYPING,
   };
 }
-// export function chatRemoveMessage(messageId) {
-//   return {
-//     messageId: action.messageId,
-//     type: CHAT_REMOVE_MESSAGE,
-//   };
-// }
+export function chatRemoveMessage(messageId) {
+  removeMessage(messageId);
+  return {
+    messageId,
+    type: CHAT_REMOVE_MESSAGE,
+  };
+}
+export function updateMessage(messageId, updateMessageText) {
+  return {
+    messageId,
+    message: updateMessageText,
+    isTyping: false,
+    type: CHAT_UPDATE_MESSAGE_BY_ID,
+  };
+}
+export function fetchUpdateMessage(messageId, updateMessageText) {
+  return async dispatch => {
+    dispatch(fetchDataStart());
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/message/${messageId}`,
+        {
+          method: 'put',
+          body: JSON.stringify(updateMessageText),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      const result = await response.json(response);
+      console.info('Update result', result);
+      return dispatch(updateMessage(messageId, updateMessageText));
+    } catch (error) {
+      return dispatch(fetchDataFailure(error));
+    }
+  };
+}
 export function fetchMessages() {
   return async dispatch => {
     dispatch(fetchDataStart());

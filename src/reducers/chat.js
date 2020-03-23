@@ -1,13 +1,18 @@
 import isEmpty from 'lodash/isEmpty';
+import findIndex from 'lodash/findIndex';
 import {
   GET_ALL_MESSAGES,
   CHAT_ADD_MESSAGE,
   CHAT_MESSAGE_IS_TYPING,
-  // CHAT_REMOVE_MESSAGE,
+  CHAT_REMOVE_MESSAGE,
+  CHAT_UPDATE_MESSAGE_BY_ID,
+  EDIT_MESSAGE,
 } from '../constants';
 
 export default function chat(state = { messages: [] }, action) {
   const { messages } = state;
+  const editMessageIndex = findIndex(messages, { id: action.messageId });
+  const lastMessageKey = messages.length;
   switch (action.type) {
     case GET_ALL_MESSAGES:
       return {
@@ -28,11 +33,27 @@ export default function chat(state = { messages: [] }, action) {
         ...state,
         isTyping: action.isTyping,
       };
-    // case CHAT_REMOVE_MESSAGE:
-    //   return {
-    //     ...state,
-    //     messageId: id,
-    //   };
+    case CHAT_REMOVE_MESSAGE:
+      return {
+        ...state,
+        messageId: action.messageId,
+      };
+    case CHAT_UPDATE_MESSAGE_BY_ID:
+      return {
+        ...state,
+        messages: [
+          ...state.messages.slice(0, editMessageIndex),
+          action.message,
+          ...state.messages.slice(editMessageIndex + 1, lastMessageKey),
+        ],
+      };
+    case EDIT_MESSAGE:
+      return {
+        ...state,
+        message: action.message,
+        messageId: action.messageId,
+        editMessageText: action.editMessageText,
+      };
     default:
       return state;
   }
