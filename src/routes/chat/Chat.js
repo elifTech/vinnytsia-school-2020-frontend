@@ -85,7 +85,6 @@ function Chat() {
       };
       socket.emit('SERVER:UPDATE_MESSAGE', updateMessageText);
       dispatch(fetchUpdateMessage(messageId, updateMessageText));
-      socket.emit('SERVER:UPDATE_MESSAGE', updateMessageText);
       setIsEditMessage(false);
       setCurrentMessage(null, '');
       setUserInput(initialState);
