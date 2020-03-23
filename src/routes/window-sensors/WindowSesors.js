@@ -1,37 +1,26 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import classNames from 'classnames';
 import map from 'lodash/map';
+import property from 'lodash/property';
 import s from './WindowSensors.css';
-import windowData from './test-window-data.json';
 import WindowSensor from './components/WindowSensor';
+import fetchWindowSensorData from '../../actions/window-sensors';
 
 function WindowSensors(props) {
   useStyles(s);
   const { title } = props;
-
-  // may be transferred to the server part
-  const sortedWindowData = windowData.slice();
-  sortedWindowData.sort((first, second) => {
-    const status1 = first.status;
-    const status2 = second.status;
-    if (
-      (status1 === 'hacked' || status1 === 'broken') &&
-      status2 !== 'hacked' &&
-      status2 !== 'broken'
-    ) {
-      return -1;
-    }
-    if (
-      status1 !== 'hacked' &&
-      status1 !== 'broken' &&
-      (status2 === 'hacked' || status2 === 'broken')
-    ) {
-      return 1;
-    }
-    return 0;
-  });
+  const dispatch = useDispatch();
+  const sortedWindowData = useSelector(
+    property('wSensors.fetchedWindowData'),
+    shallowEqual,
+  );
+  const isLoading = useSelector(property('wSensors.isLoading'), shallowEqual);
+  useEffect(() => {
+    dispatch(fetchWindowSensorData());
+  }, [dispatch]);
 
   const sensorItems = map(sortedWindowData, window => {
     return <WindowSensor key={window.id} windowSensorInfo={window} />;
@@ -39,6 +28,7 @@ function WindowSensors(props) {
   return (
     <div className="container-fluid">
       <h2 className="text-center m-5">{title}</h2>
+      {isLoading && <h1>LOADING</h1>}
       <div
         className={classNames(
           'card-deck',
