@@ -30,11 +30,15 @@ const routes = [
         load: () => import(/* webpackChunkName: 'login' */ './login'),
         path: '/login',
       },
-      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
         path: '/chat',
       },
+      {
+        load: () => import(/* webpackChunkName: 'webcam' */ './webcam'),
+        path: '/webcam',
+      },
+      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
         path: '(.+)',
