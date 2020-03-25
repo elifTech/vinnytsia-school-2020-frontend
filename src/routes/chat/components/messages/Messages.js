@@ -15,14 +15,18 @@ function Messages({ changeInputToEdit, chatRemoveMessage, items }) {
   }, [items]);
   return (
     <div ref={messageReference}>
-      {!isEmpty(items) &&
+      {!isEmpty(items) ? (
         map(items, item => {
+          // For new message
+          const createdAt = !item.createdAt ? `${new Date()}` : item.createdAt;
+          const id = !item.id ? Math.random() : item.id;
           return (
             <Message
-              key={item.id}
+              key={id}
+              attachments={item.attachments}
               changeInputToEdit={changeInputToEdit}
               chatRemoveMessage={chatRemoveMessage}
-              createdAt={item.createdAt}
+              createdAt={createdAt}
               currentUserId={testUserId}
               item={item}
               messageId={item.id}
@@ -30,7 +34,10 @@ function Messages({ changeInputToEdit, chatRemoveMessage, items }) {
               user={item.userData}
             />
           );
-        })}
+        })
+      ) : (
+        <span>Server disconnected</span>
+      )}
     </div>
   );
 }

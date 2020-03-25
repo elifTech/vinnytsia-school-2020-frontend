@@ -3,12 +3,11 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import property from 'lodash/property';
-import isEmpty from 'lodash/isEmpty';
 
 import s from './ChatInput.css';
 
 function ChatInput({
-  isEditMessage,
+  isEditCondition,
   handleChange,
   updateUserMessage,
   userInput,
@@ -18,17 +17,13 @@ function ChatInput({
   useStyles(s);
   const editMessageText = useSelector(property('chat.editMessageText'));
   useEffect(() => {
-    if (
-      // isEmpty does not work as expected
-      isEditMessage === true &&
-      (userInput === '' || isEmpty(userInput) || undefined)
-    ) {
+    if (isEditCondition && !userInput) {
       setUserInput(editMessageText);
     }
   });
   return (
     <div>
-      {isEditMessage !== true ? (
+      {isEditCondition !== true ? (
         <form className={s.chatInput} onSubmit={sendUserMessage}>
           <input onChange={handleChange} type="text" value={userInput} />
           {userInput !== '' && (
@@ -53,7 +48,7 @@ function ChatInput({
 
 ChatInput.propTypes = {
   handleChange: PropTypes.func.isRequired,
-  isEditMessage: PropTypes.bool.isRequired,
+  isEditCondition: PropTypes.bool.isRequired,
   sendUserMessage: PropTypes.func.isRequired,
   setUserInput: PropTypes.func.isRequired,
   updateUserMessage: PropTypes.func.isRequired,

@@ -1,0 +1,11 @@
+.imageAttachments {
+  margin-right: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.imageAttachments img {
+  width: 45px;
+  height: 45px;
+  border-radius: 8px;
+}

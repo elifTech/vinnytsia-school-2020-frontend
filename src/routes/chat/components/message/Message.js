@@ -8,6 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import Avatar from '../avatar';
 import IconMessageStatus from '../messageStatus/IconMessageStatus';
 import { setCurrentMessage } from '../../../../actions/security-chat';
+import renderImage from './components/ImageAttachment';
 import deleteicon from './assets/deleticon.svg';
 
 import s from './Message.css';
@@ -15,6 +16,7 @@ import s from './Message.css';
 const testIsRead = true;
 
 function Message({
+  attachments,
   chatRemoveMessage,
   changeInputToEdit,
   currentUserId,
@@ -28,26 +30,18 @@ function Message({
   const dispatch = useDispatch();
   let isMe = false;
   let messageUserId = currentUserId;
-  const checkUserId = () => {
-    if (!isEmpty(user)) {
-      messageUserId = user.id;
-    }
-    return messageUserId;
-  };
-  checkUserId();
-  const isMeValue = () => {
-    if (currentUserId === messageUserId) {
-      isMe = true;
-      return isMe;
-    }
-    return isMe;
-  };
-  isMeValue();
-  const deleteMessages = useCallback(() => {
+  if (!isEmpty(user)) {
+    messageUserId = user.id;
+  }
+  if (currentUserId === messageUserId) {
+    isMe = true;
+  }
+
+  const deleteMessage = useCallback(() => {
     dispatch(chatRemoveMessage(messageId));
   }, [chatRemoveMessage, dispatch, messageId]);
   const setEditMessageDataToRedux = useCallback(() => {
-    dispatch(changeInputToEdit);
+    changeInputToEdit();
     dispatch(setCurrentMessage(messageId, text, item));
   }, [changeInputToEdit, dispatch, messageId, text, item]);
   return (
@@ -79,7 +73,7 @@ function Message({
               <div>
                 <button
                   className={s.deleteButton}
-                  onClick={deleteMessages}
+                  onClick={deleteMessage}
                   type="submit"
                 >
                   <img alt="del" src={deleteicon} />
@@ -94,6 +88,9 @@ function Message({
               </div>
             )}
           </div>
+          {!isEmpty(attachments) && (
+            <div className={s.attachments}>{renderImage(attachments)}</div>
+          )}
           <span
             className={classNames(s.date, {
               [s.isMeDate]: isMe,
@@ -108,6 +105,7 @@ function Message({
 }
 
 Message.defaultProps = {
+  attachments: null,
   createdAt: null,
   currentUserId: null,
   item: {},
@@ -117,17 +115,18 @@ Message.defaultProps = {
 };
 
 Message.propTypes = {
+  attachments: PropTypes.string,
   changeInputToEdit: PropTypes.func.isRequired,
   chatRemoveMessage: PropTypes.func.isRequired,
   createdAt: PropTypes.string,
   currentUserId: PropTypes.number,
   item: PropTypes.shape({
-    attachment: PropTypes.string,
-    createdAt: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
+    attachments: PropTypes.string,
+    createdAt: PropTypes.string,
+    id: PropTypes.number,
     text: PropTypes.string,
-    updatedAt: PropTypes.string.isRequired,
-    userData: PropTypes.object.isRequired,
+    updatedAt: PropTypes.string,
+    userData: PropTypes.object,
     UserId: PropTypes.number.isRequired,
   }),
   messageId: PropTypes.number,

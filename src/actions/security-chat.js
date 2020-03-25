@@ -46,22 +46,6 @@ async function createMessage(newMessage) {
     return error;
   }
 }
-async function removeMessage(messageId) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/api/message/${messageId}`,
-      {
-        method: 'delete',
-        body: JSON.stringify(messageId),
-      },
-    );
-    const result = await response.json(response);
-    console.info('Delete result', result);
-    return result;
-  } catch (error) {
-    return error;
-  }
-}
 export function setCurrentMessage(messageId, text, item) {
   return {
     messageId,
@@ -104,21 +88,38 @@ export function chatMessageIsTyping(boolean) {
   };
 }
 export function chatRemoveMessage(messageId) {
-  removeMessage(messageId);
   return {
     messageId,
     type: CHAT_REMOVE_MESSAGE,
   };
 }
-export function updateMessage(messageId, updateMessageText) {
+export function setUpdatedMessage(messageId, updatedMessage) {
   return {
     messageId,
-    message: updateMessageText,
+    message: updatedMessage,
     isTyping: false,
     type: CHAT_UPDATE_MESSAGE_BY_ID,
   };
 }
-export function fetchUpdateMessage(messageId, updateMessageText) {
+export function removeMessage(messageId) {
+  chatRemoveMessage(messageId);
+  return async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/message/${messageId}`,
+        {
+          method: 'delete',
+        },
+      );
+      const result = await response.json(response);
+      console.info('Delete result', result);
+      return result;
+    } catch (error) {
+      return error;
+    }
+  };
+}
+export function updateMessage(messageId, updatedMessage) {
   return async dispatch => {
     dispatch(fetchDataStart());
     try {
@@ -126,7 +127,7 @@ export function fetchUpdateMessage(messageId, updateMessageText) {
         `http://localhost:8080/api/message/${messageId}`,
         {
           method: 'put',
-          body: JSON.stringify(updateMessageText),
+          body: JSON.stringify(updatedMessage),
           headers: {
             'Content-Type': 'application/json',
           },
@@ -134,7 +135,7 @@ export function fetchUpdateMessage(messageId, updateMessageText) {
       );
       const result = await response.json(response);
       console.info('Update result', result);
-      return dispatch(updateMessage(messageId, updateMessageText));
+      return dispatch(setUpdatedMessage(messageId, updatedMessage));
     } catch (error) {
       return dispatch(fetchDataFailure(error));
     }

@@ -31,6 +31,18 @@
   margin-left: 63px;
 }
 
+.message .attachments {
+  display: flex;
+  margin-bottom: 5px;
+  order: 1;
+}
+
+.message .attachments img {
+  width: 145px;
+  height: 145px;
+  border-radius: 8px;
+}
+
 .isMe {
   display: flex;
   flex-direction: row-reverse;
@@ -97,14 +109,6 @@
 
 .updateButton {
   display: none;
-
-  /* margin-left: 10px; */
-
-  /* padding: 10px; */
-
-  /* margin-top: 1px; */
-
-  /* margin-bottom: 1px; */
   background: #4687f1;
   height: 30px;
   width: 30px;
