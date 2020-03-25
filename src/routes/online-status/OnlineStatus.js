@@ -1,8 +1,9 @@
 import React from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
-import s from './Online-status.css';
+import useStyles from 'isomorphic-style-loader/useStyles';
+import s from './OnlineStatus.css';
 
 function OnlineStatus() {
+  useStyles(s);
   return (
     <div className={s.root}>
       <div className={s.container}>Check online status</div>
@@ -10,4 +11,4 @@ function OnlineStatus() {
   );
 }
 OnlineStatus.whyDidYouRender = true;
-export default withStyles(s)(React.memo(OnlineStatus));
+export default React.memo(OnlineStatus);
