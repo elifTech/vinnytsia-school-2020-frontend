@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import React, { useState, useCallback } from 'react';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import s from './ContextMenu.css';
@@ -12,17 +12,19 @@ function ContextMenu({
   isEdit,
   isDisarmed,
 }) {
+  useStyles(s);
   const [sensorLocation, setSensorLocation] = useState(sensor.location);
 
-  function deleteHandler() {
+  const deleteHandler = useCallback(() => {
     deleteSensorHandler(index);
-  }
-  function inputHandler(event) {
+  }, [index, deleteSensorHandler]);
+
+  const inputHandler = useCallback(event => {
     setSensorLocation(event.target.value);
-  }
-  function saveLocationHandler() {
+  }, []);
+  const saveLocationHandler = useCallback(() => {
     updateLocationHandler(index, sensorLocation);
-  }
+  }, [updateLocationHandler, index, sensorLocation]);
   return (
     <div className={s.ContextMenu}>
       {isEdit ? (
@@ -100,4 +102,4 @@ ContextMenu.propTypes = {
   updateLocationHandler: PropTypes.func.isRequired,
 };
 
-export default withStyles(s)(React.memo(ContextMenu));
+export default React.memo(ContextMenu);

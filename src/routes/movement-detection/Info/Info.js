@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from 'isomorphic-style-loader/withStyles';
-import reduce from 'lodash/reduce';
+import useStyles from 'isomorphic-style-loader/useStyles';
+import sumBy from 'lodash/sumBy';
 import s from './Info.css';
 
 function Info({ isDisarmed, sensors }) {
+  useStyles(s);
   const sensorsCount = sensors.length;
-  const sensorsOnline = isDisarmed
-    ? 0
-    : reduce(sensors, (sum, sensor) => (sensor.isDisarmed ? sum : sum + 1), 0);
+  const sensorsOnline = useMemo(
+    () =>
+      isDisarmed ? 0 : sumBy(sensors, sensor => (sensor.isDisarmed ? 0 : 1)),
+    [isDisarmed, sensors],
+  );
   const sensorsOffline = sensorsCount - sensorsOnline;
   return (
     <div className={s.Info}>
@@ -29,7 +32,7 @@ function Info({ isDisarmed, sensors }) {
 
 Info.propTypes = {
   isDisarmed: PropTypes.bool.isRequired,
-  sensors: PropTypes.instanceOf(Array).isRequired,
+  sensors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-export default withStyles(s)(React.memo(Info));
+export default React.memo(Info);

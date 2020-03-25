@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import map from 'lodash/map';
 import filter from 'lodash/filter';
-import reduce from 'lodash/reduce';
+import maxBy from 'lodash/maxBy';
 import property from 'lodash/property';
 import Aside from './Aside/Aside';
 import Info from './Info/Info';
@@ -16,9 +16,18 @@ import {
 import s from './MovementDetection.css';
 
 function MovementDetection() {
+  useStyles(s);
   const dispatch = useDispatch();
-  const { imgUrl, sensors, isDisarmed } = useSelector(
-    property('movementDetection'),
+  const imgUrl = useSelector(
+    property('movementDetection.imgUrl'),
+    shallowEqual,
+  );
+  const isDisarmed = useSelector(
+    property('movementDetection.isDisarmed'),
+    shallowEqual,
+  );
+  const sensors = useSelector(
+    property('movementDetection.sensors'),
     shallowEqual,
   );
   const [isEdit, setIsEdit] = useState(false);
@@ -55,30 +64,30 @@ function MovementDetection() {
     [localState],
   );
 
-  function disarmHandler() {
+  const disarmHandler = useCallback(() => {
     dispatch(disarmSensors());
-  }
-  function editHandler() {
+  }, [dispatch]);
+
+  const editHandler = useCallback(() => {
     setIsEdit(!isEdit);
     setLocalState({ imgUrl, sensors: Array.from(sensors) });
-  }
-  function saveHandler() {
+  }, [imgUrl, isEdit, sensors]);
+
+  const saveHandler = useCallback(() => {
     setIsEdit(false);
     dispatch(updateSensors(localState.sensors));
     dispatch(addImgUrl(localState.imgUrl));
-  }
-  function cancelHandler() {
+  }, [dispatch, localState]);
+  const cancelHandler = useCallback(() => {
     setIsEdit(false);
     setLocalState({ imgUrl, sensors });
-  }
+  }, [imgUrl, sensors]);
 
-  function addSensorHandler() {
+  const addSensorHandler = useCallback(() => {
     const nextSensorId =
-      reduce(
-        localState.sensors,
-        (previous, next) => (previous < next.id ? next.id : previous),
-        0,
-      ) + 1;
+      localState.sensors.length > 0
+        ? maxBy(localState.sensors, 'id').id + 1
+        : 0;
     setLocalState({
       ...localState,
       sensors: [
@@ -86,22 +95,28 @@ function MovementDetection() {
         { x: 0, y: 0, location: '', id: nextSensorId },
       ],
     });
-  }
-  function deleteSensorHandler(index) {
-    const newSensors = filter(
-      localState.sensors,
-      (sensor, sensorIndex) => sensorIndex !== index,
-    );
-    setLocalState({ ...localState, sensors: newSensors });
-  }
-  function updateLocationHandler(index, location) {
-    const newSensors = Array.from(localState.sensors);
-    newSensors[index] = {
-      ...newSensors[index],
-      location,
-    };
-    setLocalState({ ...localState, sensors: newSensors });
-  }
+  }, [localState]);
+  const deleteSensorHandler = useCallback(
+    index => {
+      const newSensors = filter(
+        localState.sensors,
+        (sensor, sensorIndex) => sensorIndex !== index,
+      );
+      setLocalState({ ...localState, sensors: newSensors });
+    },
+    [localState],
+  );
+  const updateLocationHandler = useCallback(
+    (index, location) => {
+      const newSensors = Array.from(localState.sensors);
+      newSensors[index] = {
+        ...newSensors[index],
+        location,
+      };
+      setLocalState({ ...localState, sensors: newSensors });
+    },
+    [localState],
+  );
 
   return (
     <div className={s.container}>
@@ -146,4 +161,4 @@ function MovementDetection() {
 }
 
 MovementDetection.whyDidYouRender = true;
-export default withStyles(s)(React.memo(MovementDetection));
+export default React.memo(MovementDetection);

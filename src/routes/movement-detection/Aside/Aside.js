@@ -1,5 +1,5 @@
 import React from 'react';
-import withStyle from 'isomorphic-style-loader/withStyles';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import s from './Aside.css';
@@ -15,6 +15,7 @@ function Aside({
   isEdit,
   saveHandler,
 }) {
+  useStyles(s);
   return (
     <aside className={classNames(s.Aside, 'btn-group-vertical')}>
       {isEdit ? (
@@ -91,4 +92,4 @@ Aside.propTypes = {
 };
 
 Aside.whyDidYouRender = true;
-export default withStyle(s)(React.memo(Aside));
+export default React.memo(Aside);

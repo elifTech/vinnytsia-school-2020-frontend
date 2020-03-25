@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import withStyles from 'isomorphic-style-loader/withStyles';
+import React, { useState, useMemo, useCallback } from 'react';
+import useStyles from 'isomorphic-style-loader/useStyles';
 import Draggable from 'react-draggable';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import s from './Sensor.css';
 import sensorPicture from '../assets/sensor.svg';
 import ContextMenu from './ContextMenu/ContextMenu';
+import s from './Sensor.css';
 
 function Sensor({
   positionHandler,
@@ -16,12 +16,16 @@ function Sensor({
   isEdit,
   updateLocationHandler,
 }) {
+  useStyles(s);
   const [hover, setHover] = useState(false);
   const [contextMenuShow, setContextMenuShow] = useState(false);
   const limit = 25;
-  const options = {
-    position: sensor,
-  };
+  const options = useMemo(
+    () => ({
+      position: sensor,
+    }),
+    [sensor],
+  );
 
   if (isEdit) {
     options.handleOnDrag = (event, ui) => positionHandler(ui, index);
@@ -55,14 +59,14 @@ function Sensor({
     />
   );
 
-  function hoverHandler() {
+  const hoverHandler = useCallback(() => {
     setHover(!hover);
     setContextMenuShow(false);
-  }
-  function contextMenuHandler(event) {
+  }, [hover]);
+  const contextMenuHandler = useCallback(event => {
     event.preventDefault();
     setContextMenuShow(true);
-  }
+  }, []);
 
   return (
     <Draggable
@@ -105,4 +109,4 @@ Sensor.propTypes = {
 };
 
 Sensor.whyDidYouRender = true;
-export default withStyles(s)(React.memo(Sensor));
+export default React.memo(Sensor);
