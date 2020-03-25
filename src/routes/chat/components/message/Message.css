@@ -1,0 +1,86 @@
+.message {
+  height: 100%;
+}
+
+.message .content {
+  display: flex;
+  max-width: 400px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.message .content .bubble {
+  background: #c4cdbd;
+  box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+  border-radius: 12px 12px 12px 0;
+  padding: 15px;
+  margin-bottom: 8px;
+  max-width: 400px;
+}
+
+.message .avatar {
+  border-radius: 50%;
+  width: 60px;
+  height: 100%;
+}
+
+.message .bubble p {
+  color: #000;
+  line-height: 20px;
+  max-width: 400px;
+  overflow-x: hidden;
+}
+
+.message .date {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-left: 63px;
+}
+
+.isMe {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.isMe .fullname {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.isMe .content {
+  display: flex;
+  max-width: 440px;
+  margin-bottom: 0;
+  position: relative;
+  flex-direction: row-reverse;
+}
+
+.isMe .avatar {
+  border-radius: 50%;
+  width: 60px;
+  height: 100%;
+}
+
+.isMe .content .bubbleIsMe {
+  background: limegreen;
+  box-shadow: 0 5px 5px rgba(54, 116, 255, 0.196733);
+  border-radius: 12px 12px 12px 0;
+  padding: 15px;
+  margin-bottom: 8px;
+  margin-left: 5px;
+}
+
+.isMe .content .bubble p {
+  color: #fff;
+  line-height: 20px;
+  max-width: 400px;
+  overflow-x: hidden;
+}
+
+.isMe .isMeDate {
+  display: flex;
+  font-size: 12px;
+  opacity: 0.5;
+  flex-direction: row-reverse;
+  margin-right: 63px;
+}
