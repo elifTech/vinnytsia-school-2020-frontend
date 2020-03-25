@@ -35,7 +35,7 @@ const routes = [
           import(
             /* webpackChunkName: 'movement-detection' */ './movement-detection'
           ),
-        path: '/sensors',
+        path: '/movement-detection',
       },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {

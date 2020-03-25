@@ -1,5 +1,5 @@
 import React from 'react';
-import Sensors from './Sensors';
+import MovementDetection from './MovementDetection';
 import Layout from '../../components/Layout/Layout';
 
 export default function action() {
@@ -7,7 +7,7 @@ export default function action() {
     chunks: ['movement-detection'],
     component: (
       <Layout>
-        <Sensors />
+        <MovementDetection />
       </Layout>
     ),
     title: 'Movement detection',

@@ -5,31 +5,25 @@ import classNames from 'classnames';
 import s from './Aside.css';
 
 function Aside({
-  isEdit,
-  file,
-  addSensor,
-  fileHandler,
-  saveHandler,
+  addSensorHandler,
   cancelHandler,
+  disarmHandler,
   editHandler,
+  fileHandler,
+  isDisarmed,
+  imgUrl,
+  isEdit,
+  saveHandler,
 }) {
   return (
     <aside className={classNames(s.Aside, 'btn-group-vertical')}>
       {isEdit ? (
         <>
-          <button
-            className={classNames('btn', 'btn-primary')}
-            disabled={!file}
-            onClick={addSensor}
-            type="button"
-          >
-            Add Sensor
-          </button>
           <label
             className={classNames(s.addFile, 'btn', 'btn-primary')}
             htmlFor="addfile"
           >
-            Add plan
+            {imgUrl ? 'Change plan' : 'Add plan'}
             <input
               accept="image/*"
               id="addfile"
@@ -38,39 +32,60 @@ function Aside({
             />
           </label>
           <button
-            className={classNames('btn', 'btn-success')}
-            onClick={saveHandler}
+            className="btn btn-primary"
+            disabled={!imgUrl}
+            onClick={addSensorHandler}
             type="button"
           >
-            Save
+            Add Sensor
           </button>
-          <button
-            className={classNames('btn', 'btn-danger')}
-            onClick={cancelHandler}
-            type="button"
-          >
-            Cancel
-          </button>
+
+          <div className={classNames(s.btnContainer, 'btn-group-vertical')}>
+            <button
+              className="btn btn-success"
+              onClick={saveHandler}
+              type="button"
+            >
+              Save
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={cancelHandler}
+              type="button"
+            >
+              Cancel
+            </button>
+          </div>
         </>
       ) : (
-        <button
-          className={classNames('btn', 'btn-primary')}
-          onClick={editHandler}
-          type="button"
-        >
-          Edit
+        <button className="btn btn-primary" onClick={editHandler} type="button">
+          Settings
         </button>
       )}
+      <div className={s.btnContainer}>
+        <button
+          className={classNames('btn', {
+            'btn-success': !isDisarmed,
+            'btn-warning': isDisarmed,
+          })}
+          onClick={disarmHandler}
+          type="button"
+        >
+          {isDisarmed ? 'SECURITY OFFLINE' : 'SECURITY ONLINE'}
+        </button>
+      </div>
     </aside>
   );
 }
 
 Aside.propTypes = {
-  addSensor: PropTypes.func.isRequired,
+  addSensorHandler: PropTypes.func.isRequired,
   cancelHandler: PropTypes.func.isRequired,
+  disarmHandler: PropTypes.func.isRequired,
   editHandler: PropTypes.func.isRequired,
-  file: PropTypes.string.isRequired,
   fileHandler: PropTypes.func.isRequired,
+  imgUrl: PropTypes.string.isRequired,
+  isDisarmed: PropTypes.bool.isRequired,
   isEdit: PropTypes.bool.isRequired,
   saveHandler: PropTypes.func.isRequired,
 };
