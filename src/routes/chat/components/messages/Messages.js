@@ -6,6 +6,7 @@ import isEmpty from 'lodash/isEmpty';
 import Message from '../message';
 
 const testUserId = 1;
+const temporaryId = Math.random();
 
 function Messages({ changeInputToEdit, chatRemoveMessage, items }) {
   console.info('In messages', items);
@@ -17,16 +18,13 @@ function Messages({ changeInputToEdit, chatRemoveMessage, items }) {
     <div ref={messageReference}>
       {!isEmpty(items) ? (
         map(items, item => {
-          // For new message
-          const createdAt = !item.createdAt ? `${new Date()}` : item.createdAt;
-          const id = !item.id ? Math.random() : item.id;
           return (
             <Message
-              key={id}
-              attachments={item.attachments}
+              key={item.id || temporaryId}
+              attachment={item.attachments}
               changeInputToEdit={changeInputToEdit}
               chatRemoveMessage={chatRemoveMessage}
-              createdAt={createdAt}
+              createdAt={item.createdAt}
               currentUserId={testUserId}
               item={item}
               messageId={item.id}
@@ -47,7 +45,7 @@ Messages.propTypes = {
   chatRemoveMessage: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      attachment: PropTypes.object,
+      attachments: PropTypes.string,
       createdAt: PropTypes.string,
       id: PropTypes.number,
       text: PropTypes.string,

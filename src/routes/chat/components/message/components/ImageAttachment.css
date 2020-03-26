@@ -1,10 +1,10 @@
-.imageAttachments {
+.imageAttachment {
   margin-right: 5px;
   cursor: pointer;
   position: relative;
 }
 
-.imageAttachments img {
+.imageAttachment img {
   width: 45px;
   height: 45px;
   border-radius: 8px;

@@ -1,6 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
 import findIndex from 'lodash/findIndex';
-import assign from 'lodash/assign';
 import {
   GET_ALL_MESSAGES,
   CHAT_ADD_MESSAGE,
@@ -13,10 +12,12 @@ import {
 export default function chat(state = { messages: [] }, action) {
   const { messages } = state;
   const editMessageIndex = findIndex(messages, { id: action.messageId });
-  const newArrayMessages = Array.from(
-    assign(messages, (messages[editMessageIndex] = action.message)),
-  );
-
+  const nextMessagesArray = {
+    messages: Array.from(state.messages),
+  };
+  nextMessagesArray.messages[editMessageIndex] = {
+    [editMessageIndex]: action.message,
+  };
   switch (action.type) {
     case GET_ALL_MESSAGES:
       return {
@@ -41,11 +42,15 @@ export default function chat(state = { messages: [] }, action) {
       return {
         ...state,
         messageId: action.messageId,
+        messages: [
+          ...state.messages.slice(0, editMessageIndex),
+          ...state.messages.slice(editMessageIndex + 1),
+        ],
       };
     case CHAT_UPDATE_MESSAGE_BY_ID:
       return {
         ...state,
-        messages: newArrayMessages,
+        nextMessagesArray,
       };
     case EDIT_MESSAGE:
       return {

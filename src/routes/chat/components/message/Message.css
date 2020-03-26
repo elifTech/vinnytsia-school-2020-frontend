@@ -31,13 +31,13 @@
   margin-left: 63px;
 }
 
-.message .attachments {
+.message .attachment {
   display: flex;
   margin-bottom: 5px;
   order: 1;
 }
 
-.message .attachments img {
+.message .attachment img {
   width: 145px;
   height: 145px;
   border-radius: 8px;

@@ -8,7 +8,7 @@ import isEmpty from 'lodash/isEmpty';
 import Avatar from '../avatar';
 import IconMessageStatus from '../messageStatus/IconMessageStatus';
 import { setCurrentMessage } from '../../../../actions/security-chat';
-import renderImage from './components/ImageAttachment';
+import ImageAttachment from './components/ImageAttachment';
 import deleteicon from './assets/deleticon.svg';
 
 import s from './Message.css';
@@ -16,7 +16,7 @@ import s from './Message.css';
 const testIsRead = true;
 
 function Message({
-  attachments,
+  attachment,
   chatRemoveMessage,
   changeInputToEdit,
   currentUserId,
@@ -88,8 +88,10 @@ function Message({
               </div>
             )}
           </div>
-          {!isEmpty(attachments) && (
-            <div className={s.attachments}>{renderImage(attachments)}</div>
+          {!isEmpty(attachment) && (
+            <div className={s.attachment}>
+              <ImageAttachment attachment={attachment} />
+            </div>
           )}
           <span
             className={classNames(s.date, {
@@ -105,7 +107,7 @@ function Message({
 }
 
 Message.defaultProps = {
-  attachments: null,
+  attachment: null,
   createdAt: null,
   currentUserId: null,
   item: {},
@@ -115,13 +117,13 @@ Message.defaultProps = {
 };
 
 Message.propTypes = {
-  attachments: PropTypes.string,
+  attachment: PropTypes.string,
   changeInputToEdit: PropTypes.func.isRequired,
   chatRemoveMessage: PropTypes.func.isRequired,
   createdAt: PropTypes.string,
   currentUserId: PropTypes.number,
   item: PropTypes.shape({
-    attachments: PropTypes.string,
+    attachment: PropTypes.string,
     createdAt: PropTypes.string,
     id: PropTypes.number,
     text: PropTypes.string,

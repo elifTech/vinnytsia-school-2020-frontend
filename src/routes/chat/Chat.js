@@ -29,12 +29,17 @@ function Chat() {
   const messages = useSelector(property('chat.messages'));
   const message = useSelector(property('chat.message'));
   const messageId = useSelector(property('chat.messageId'));
+  const [isEditCondition, setInEditCondition] = useState(false);
   useEffect(() => {
     dispatch(fetchMessages());
+    if (isEditCondition) {
+      console.info('Add Listener message');
+      window.addEventListener('message', message);
+    }
     socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
-  }, [dispatch]);
+  }, [dispatch, isEditCondition, message]);
   useEffect(() => {
     socket.on('SERVER:REMOVE_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
@@ -44,14 +49,14 @@ function Chat() {
     socket.on('SERVER:UPDATE_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
-    return function cleanupListener() {
+    if (!isEditCondition) {
       console.info('removeEL message ');
       window.removeEventListener('message', message);
-    };
-  }, [dispatch, message, messageId]);
+    }
+  }, [dispatch, isEditCondition, message, messageId]);
   const initialState = '';
   const [userInput, setUserInput] = useState(initialState);
-  const [isEditCondition, setInEditCondition] = useState(false);
+  // const [isEditCondition, setInEditCondition] = useState(false);
   const changeInputToEdit = useCallback(() => {
     setInEditCondition(true);
   }, []);
@@ -60,7 +65,6 @@ function Chat() {
       socket.emit('CHAT:TYPING', testUserId);
       setUserInput(get(event, 'target.value'));
       dispatch(chatMessageIsTyping(true));
-      // return userInput;
     },
     [dispatch],
   );
@@ -90,7 +94,6 @@ function Chat() {
       dispatch(updateMessage(messageId, updatedMessage));
       setInEditCondition(false);
       setCurrentMessage(null, '');
-      setUserInput(initialState);
       return setUserInput(initialState);
     },
     [dispatch, message, messageId, userInput],

@@ -39,9 +39,7 @@ async function createMessage(newMessage) {
       body: JSON.stringify(newMessage),
       headers: { 'Content-Type': 'application/json' },
     });
-    const result = await response.json(response);
-    console.info('Add message', result);
-    return result;
+    return await response.json();
   } catch (error) {
     return error;
   }
@@ -65,9 +63,7 @@ export async function fetchMessageById(messageId) {
         },
       },
     );
-    const result = await response.json(response);
-    console.info('Get by id result', result);
-    return result;
+    return await response.json();
   } catch (error) {
     return error;
   }
@@ -102,8 +98,8 @@ export function setUpdatedMessage(messageId, updatedMessage) {
   };
 }
 export function removeMessage(messageId) {
-  chatRemoveMessage(messageId);
-  return async () => {
+  return async dispatch => {
+    dispatch(fetchDataStart());
     try {
       const response = await fetch(
         `http://localhost:8080/api/message/${messageId}`,
@@ -111,11 +107,10 @@ export function removeMessage(messageId) {
           method: 'delete',
         },
       );
-      const result = await response.json(response);
-      console.info('Delete result', result);
-      return result;
+      await response.json();
+      return dispatch(chatRemoveMessage(messageId));
     } catch (error) {
-      return error;
+      return dispatch(fetchDataFailure(error));
     }
   };
 }
@@ -133,8 +128,7 @@ export function updateMessage(messageId, updatedMessage) {
           },
         },
       );
-      const result = await response.json(response);
-      console.info('Update result', result);
+      await response.json();
       return dispatch(setUpdatedMessage(messageId, updatedMessage));
     } catch (error) {
       return dispatch(fetchDataFailure(error));
