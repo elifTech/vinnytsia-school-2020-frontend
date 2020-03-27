@@ -26,16 +26,20 @@ const routes = [
         load: () => import(/* webpackChunkName: 'dashboard' */ './dashboard'),
         path: '',
       },
-      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
-        load: () =>
-          import(/* webpackChunkName: 'online-status' */ './online-status'),
-        path: '/online-status',
+        load: () => import(/* webpackChunkName: 'login' */ './login'),
+        path: '/login',
       },
       {
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
         path: '/chat',
       },
+      {
+        load: () =>
+          import(/* webpackChunkName: 'online-status' */ './online-status'),
+        path: '/online-status',
+      },
+      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
         path: '(.+)',
