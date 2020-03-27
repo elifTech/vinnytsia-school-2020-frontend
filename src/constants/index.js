@@ -10,6 +10,10 @@ export const FETCH_DATA_FAILURE = 'FETCH_DATA_FAILURE';
 export const CHANGE_NUM_OF_COLUMNS = 'CHANGE_NUM_OF_COLUMNS';
 export const CHANGE_NUM_OF_ROWS = 'CHANGE_NUM_OF_ROWS';
 
+// movement detecion
+export const ADD_IMG_URL = 'ADD_IMG_URL';
+export const UPDATE_SENSORS = 'UPDATE_SENSORS';
+export const DISARM = 'DISARM';
 export const GET_ALL_MESSAGES = 'GET_ALL_MESSAGES';
 export const CHAT_ADD_MESSAGE = 'CHAT_ADD_MESSAGE';
 export const CHAT_MESSAGE_IS_TYPING = 'CHAT_MESSAGE_IS_TYPING';
