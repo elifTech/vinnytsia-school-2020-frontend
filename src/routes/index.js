@@ -37,11 +37,11 @@ const routes = [
           ),
         path: '/movement-detection',
       },
-      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
         path: '/chat',
       },
+      // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),
         path: '(.+)',

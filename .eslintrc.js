@@ -30,6 +30,13 @@ module.exports = {
         'unicorn/no-process-exit': 'off',
       },
     },
+    {
+      files: ['*.test.js'],
+      rules: {
+        'lodash/prefer-constant': 'off',
+        'react/jsx-props-no-spreading': 'off',
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
