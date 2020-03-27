@@ -1,0 +1,123 @@
+.Sensor {
+  width: fit-content;
+  height: fit-content;
+  cursor: pointer;
+  position: absolute;
+  box-shadow: 0 0 0 0 rgb(255, 0, 0);
+}
+
+.Sensor_waves::before,
+.Sensor_waves::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: '';
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  opacity: 0;
+  animation: anim infinite linear 4s;
+  animation-delay: 0.5s;
+  cursor: default;
+}
+
+.Sensor_waves::after {
+  animation-delay: 2.5s;
+}
+
+.Normal::before,
+.Normal::after {
+  border: 1px solid rgb(0, 255, 0);
+  box-shadow:
+    0 0 3px 0.5px rgb(0, 255, 0.9),
+    0 0 13px 1.5px rgba(0, 255, 0, 0.8),
+    0 0 23px 2.5px rgba(0, 255, 0, 0.7),
+    inset 0 0 3px 0.5px rgb(0, 255, 0.9),
+    inset 0 0 13px 1.5px rgba(0, 255, 0, 0.8),
+    inset 0 0 23px 2.5px rgba(0, 255, 0, 0.7);
+}
+
+.Alert::before,
+.Alert::after {
+  border: 1px solid red;
+  box-shadow:
+    0 0 3px 0.5px rgb(255, 0, 0.9),
+    0 0 13px 1.5px rgba(255, 0, 0, 0.8),
+    0 0 23px 2.5px rgba(255, 0, 0, 0.7),
+    inset 0 0 3px 0.5px rgb(255, 0, 0.9),
+    inset 0 0 13px 1.5px rgba(255, 0, 0, 0.8),
+    inset 0 0 23px 2.5px rgba(255, 0, 0, 0.7);
+}
+
+.SensorImg {
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  transition: 1s;
+}
+
+.SensorImg_disabled {
+  filter: grayscale(100%);
+}
+
+.SensorImg_alert {
+  filter: hue-rotate(170deg) saturate(300%);
+}
+
+@keyframes anim {
+  0% {
+    width: 50px;
+    height: 50px;
+    opacity: 0.3;
+  }
+
+  12.5% {
+    width: 80px;
+    height: 80px;
+    opacity: 0.825;
+  }
+
+  25% {
+    width: 110px;
+    height: 110px;
+    opacity: 0.75;
+  }
+
+  37.5% {
+    width: 140px;
+    height: 140px;
+    opacity: 0.625;
+  }
+
+  50% {
+    width: 170px;
+    height: 170px;
+    opacity: 0.5;
+  }
+
+  62.5% {
+    width: 200px;
+    height: 200px;
+    opacity: 0.375;
+  }
+
+  75% {
+    width: 230px;
+    height: 230px;
+    opacity: 0.25;
+  }
+
+  82.5% {
+    width: 260px;
+    height: 260px;
+    opacity: 0.125;
+  }
+
+  100% {
+    width: 290px;
+    height: 290px;
+    opacity: 0.05;
+  }
+}

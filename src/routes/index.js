@@ -31,6 +31,13 @@ const routes = [
         path: '/login',
       },
       {
+        load: () =>
+          import(
+            /* webpackChunkName: 'movement-detection' */ './movement-detection'
+          ),
+        path: '/movement-detection',
+      },
+      {
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
         path: '/chat',
       },
