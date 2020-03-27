@@ -1,9 +1,11 @@
 // import fetch from 'node-fetch';
-import testWindowData from '../routes/window-sensors/test-window-data.json';
+import testWindowData from '../routes/windows-protection/test-window-data.json';
+import testWindowSensorsData from '../routes/windows-protection/test-window-sensors-data.json';
 import {
   FETCH_DATA_START,
   FETCH_DATA_FAILURE,
   FETCH_WINDOW_DATA_SUCCESS,
+  FETCH_WINDOW_SENSORS_SUCCESS,
 } from '../constants';
 
 function fetchDataStart() {
@@ -23,8 +25,14 @@ function fetchWindowDataSuccess(fetchedWindowData) {
     fetchedWindowData,
   };
 }
+function fetchWindowSensorsSuccess(fetchedWindowSensors) {
+  return {
+    type: FETCH_WINDOW_SENSORS_SUCCESS,
+    fetchedWindowSensors,
+  };
+}
 
-export default function fetchWindowSensorData() {
+export function fetchWindowData() {
   return dispatch => {
     dispatch(fetchDataStart());
     try {
@@ -50,6 +58,17 @@ export default function fetchWindowSensorData() {
       });
 
       return dispatch(fetchWindowDataSuccess(testWindowData));
+    } catch (error) {
+      return dispatch(fetchDataFailure(error));
+    }
+  };
+}
+
+export function fetchWindowSensors() {
+  return dispatch => {
+    dispatch(fetchDataStart());
+    try {
+      return dispatch(fetchWindowSensorsSuccess(testWindowSensorsData));
     } catch (error) {
       return dispatch(fetchDataFailure(error));
     }

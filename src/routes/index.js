@@ -32,8 +32,10 @@ const routes = [
       },
       {
         load: () =>
-          import(/* webpackChunkName: 'window-sensors' */ './window-sensors'),
-        path: '/window-sensors',
+          import(
+            /* webpackChunkName: 'windows-protection' */ './windows-protection'
+          ),
+        path: '/windows-protection',
       },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {

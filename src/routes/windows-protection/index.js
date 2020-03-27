@@ -1,15 +1,15 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import WindowSensors from './WindowSesors';
+import WindowProtection from './WindowProtection';
 
-const title = 'Window Sensors';
+const title = 'Window protection';
 
 export default function action() {
   return {
-    chunks: ['window-sensors'],
+    chunks: ['windows-protection'],
     component: (
       <Layout>
-        <WindowSensors title={title} />
+        <WindowProtection title={title} />
       </Layout>
     ),
     title,

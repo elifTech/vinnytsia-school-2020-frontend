@@ -5,25 +5,25 @@ import useStyles from 'isomorphic-style-loader/useStyles';
 import classNames from 'classnames';
 import map from 'lodash/map';
 import property from 'lodash/property';
-import s from './WindowSensors.css';
-import WindowSensor from './components/WindowSensor';
-import fetchWindowSensorData from '../../actions/window-sensors';
+import s from './Windows.css';
+import WindowItem from './WindowItem';
+import { fetchWindowData } from '../../../../actions/window-sensors';
 
-function WindowSensors(props) {
+function Windows(props) {
   useStyles(s);
   const { title } = props;
   const dispatch = useDispatch();
-  const sortedWindowData = useSelector(
+  const windowData = useSelector(
     property('wSensors.fetchedWindowData'),
     shallowEqual,
   );
   const isLoading = useSelector(property('wSensors.isLoading'), shallowEqual);
   useEffect(() => {
-    dispatch(fetchWindowSensorData());
+    dispatch(fetchWindowData());
   }, [dispatch]);
 
-  const sensorItems = map(sortedWindowData, window => {
-    return <WindowSensor key={window.id} windowSensorInfo={window} />;
+  const windows = map(windowData, window => {
+    return <WindowItem key={window.id} windowInfo={window} />;
   });
   return (
     <div className="container-fluid">
@@ -36,15 +36,15 @@ function WindowSensors(props) {
           s.cardDeck,
         )}
       >
-        {sensorItems}
+        {windows}
       </div>
     </div>
   );
 }
-WindowSensors.propTypes = {
+Windows.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-WindowSensors.whyDidYouRender = true;
+Windows.whyDidYouRender = true;
 
-export default memo(WindowSensors);
+export default memo(Windows);
