@@ -32,7 +32,12 @@ function Info({ isDisarmed, sensors }) {
 
 Info.propTypes = {
   isDisarmed: PropTypes.bool.isRequired,
-  sensors: PropTypes.arrayOf(PropTypes.object).isRequired,
+  sensors: PropTypes.arrayOf(
+    PropTypes.shape({
+      isDisarmed: PropTypes.bool,
+      lastAlert: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
 export default React.memo(Info);

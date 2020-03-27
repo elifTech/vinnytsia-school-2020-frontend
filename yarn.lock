@@ -3964,7 +3964,7 @@ eslint-plugin-lodash@~6.0.0:
   dependencies:
     lodash "^4.17.15"
 
-eslint-plugin-postcss-modules@^1.1.2:
+eslint-plugin-postcss-modules@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-postcss-modules/-/eslint-plugin-postcss-modules-1.1.2.tgz#8477d999ca745ead3a4ba1eda5a084833e21cd0e"
   integrity sha512-UIDBPmBXGjKvr97eKmhdjY2NqVA/0ZCWAzU/G33CCjBis/Q/+MdUcSgBX0bJQvk2sV3bU3NS7lG0IQzTGwYmVw==
@@ -8610,7 +8610,7 @@ react-dom@~16.13.0:
     prop-types "^15.6.2"
     scheduler "^0.19.0"
 
-react-draggable@^4.2.0:
+react-draggable@~4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.2.0.tgz#40cc5209082ca7d613104bf6daf31372cc0e1114"
   integrity sha512-5wFq//gEoeTYprnd4ze8GrFc+Rbnx+9RkOMR3vk4EbWxj02U6L6T3yrlKeiw4X5CtjD2ma2+b3WujghcXNRzkw==

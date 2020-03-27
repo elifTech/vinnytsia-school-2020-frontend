@@ -20,24 +20,23 @@ function Sensor({
   const [hover, setHover] = useState(false);
   const [contextMenuShow, setContextMenuShow] = useState(false);
   const limit = 25;
-  const options = useMemo(
-    () => ({
+  const options = useMemo(() => {
+    const newOptions = {
       position: sensor,
-    }),
-    [sensor],
-  );
-
-  if (isEdit) {
-    options.handleOnDrag = (event, ui) => positionHandler(ui, index);
-    options.bounds = 'parent';
-  } else {
-    options.bounds = {
-      top: sensor.y - limit,
-      left: sensor.x - limit,
-      right: sensor.x + limit,
-      bottom: sensor.y + limit,
     };
-  }
+    if (isEdit) {
+      newOptions.handleOnDrag = (event, ui) => positionHandler(ui, index);
+      newOptions.bounds = 'parent';
+    } else {
+      newOptions.bounds = {
+        top: sensor.y - limit,
+        left: sensor.x - limit,
+        right: sensor.x + limit,
+        bottom: sensor.y + limit,
+      };
+    }
+    return newOptions;
+  }, [sensor, isEdit, positionHandler, index]);
 
   const content = contextMenuShow ? (
     <ContextMenu
