@@ -1,0 +1,30 @@
+.ContextMenu {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #aaa;
+  width: fit-content;
+  height: fit-content;
+  background: rgba(200, 200, 200, 0.8);
+  border-radius: 3px;
+  text-align: left;
+}
+
+.ContextMenu > p {
+  padding: 5px;
+}
+
+.locationTitle {
+  display: flex;
+  flex-direction: column;
+  padding: 0 5px;
+}
+
+.location {
+  width: 140px;
+}
+
+.title {
+  text-align: center;
+  font-weight: 600;
+  background: #009688;
+}
