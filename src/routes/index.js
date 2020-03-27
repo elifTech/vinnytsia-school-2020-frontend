@@ -41,6 +41,11 @@ const routes = [
         load: () => import(/* webpackChunkName: 'chat' */ './chat'),
         path: '/chat',
       },
+      {
+        load: () =>
+          import(/* webpackChunkName: 'online-status' */ './online-status'),
+        path: '/online-status',
+      },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),

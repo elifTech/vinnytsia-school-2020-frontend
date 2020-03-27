@@ -4060,7 +4060,7 @@ eslint-plugin-lodash@~6.0.0:
   dependencies:
     lodash "^4.17.15"
 
-eslint-plugin-postcss-modules@~1.1.2:
+eslint-plugin-postcss-modules@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/eslint-plugin-postcss-modules/-/eslint-plugin-postcss-modules-1.1.2.tgz#8477d999ca745ead3a4ba1eda5a084833e21cd0e"
   integrity sha512-UIDBPmBXGjKvr97eKmhdjY2NqVA/0ZCWAzU/G33CCjBis/Q/+MdUcSgBX0bJQvk2sV3bU3NS7lG0IQzTGwYmVw==
