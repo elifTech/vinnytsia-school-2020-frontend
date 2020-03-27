@@ -1,17 +1,51 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-// After creating user model will use Avatar component instead <img>
-// import Avatar from '../avatar';
+import isEmpty from 'lodash/isEmpty';
+
+import Avatar from '../avatar';
 import IconMessageStatus from '../messageStatus/IconMessageStatus';
+import { setCurrentMessage } from '../../../../actions/security-chat';
+import ImageAttachment from './components/ImageAttachment';
+import deleteicon from './assets/deleticon.svg';
 
 import s from './Message.css';
+import socket from '../../../../utils/socket';
 
 const testIsRead = true;
 
-function Message({ isMe, createdAt, text, user }) {
+function Message({
+  attachment,
+  chatRemoveMessage,
+  changeInputToEdit,
+  currentUserId,
+  createdAt,
+  item,
+  messageId,
+  text,
+  user,
+}) {
   useStyles(s);
+  const dispatch = useDispatch();
+  let isMe = false;
+  let messageUserId = currentUserId;
+  if (!isEmpty(user)) {
+    messageUserId = user.id;
+  }
+  if (currentUserId === messageUserId) {
+    isMe = true;
+  }
+
+  const deleteMessage = useCallback(() => {
+    socket.emit('SERVER:REMOVE_MESSAGE', messageId);
+    dispatch(chatRemoveMessage(messageId));
+  }, [chatRemoveMessage, dispatch, messageId]);
+  const setEditMessageDataToRedux = useCallback(() => {
+    changeInputToEdit();
+    dispatch(setCurrentMessage(messageId, text, item));
+  }, [changeInputToEdit, dispatch, messageId, text, item]);
   return (
     <div
       className={classNames('message', {
@@ -28,11 +62,7 @@ function Message({ isMe, createdAt, text, user }) {
         </span>
         <div>
           <div className={s.content}>
-            <img
-              alt="User"
-              className={s.avatar}
-              src="https://googleretailtraining.exceedlms.com/assets/student/google/default_avatar-5298a7fcd9a9a0ce0d2b32e9aa826a32cc521cb5249540190792626b75504b39.png"
-            />
+            <Avatar user={user} />
             <div
               className={classNames(s.bubble, {
                 [s.bubbleIsMe]: isMe,
@@ -41,7 +71,30 @@ function Message({ isMe, createdAt, text, user }) {
               <p>{text}</p>
             </div>
             <IconMessageStatus isMe={isMe} isRead={testIsRead} />
+            {isMe && (
+              <div>
+                <button
+                  className={s.deleteButton}
+                  onClick={deleteMessage}
+                  type="submit"
+                >
+                  <img alt="del" src={deleteicon} />
+                </button>
+                <button
+                  className={s.updateButton}
+                  onClick={setEditMessageDataToRedux}
+                  type="submit"
+                >
+                  Edit
+                </button>
+              </div>
+            )}
           </div>
+          {!isEmpty(attachment) && (
+            <div className={s.attachment}>
+              <ImageAttachment attachment={attachment} />
+            </div>
+          )}
           <span
             className={classNames(s.date, {
               [s.isMeDate]: isMe,
@@ -56,18 +109,35 @@ function Message({ isMe, createdAt, text, user }) {
 }
 
 Message.defaultProps = {
+  attachment: null,
   createdAt: null,
-  isMe: false,
+  currentUserId: null,
+  item: {},
+  messageId: null,
   text: null,
   user: {},
 };
 
 Message.propTypes = {
+  attachment: PropTypes.string,
+  changeInputToEdit: PropTypes.func.isRequired,
+  chatRemoveMessage: PropTypes.func.isRequired,
   createdAt: PropTypes.string,
-  isMe: PropTypes.bool,
+  currentUserId: PropTypes.number,
+  item: PropTypes.shape({
+    attachment: PropTypes.string,
+    createdAt: PropTypes.string,
+    id: PropTypes.number,
+    text: PropTypes.string,
+    updatedAt: PropTypes.string,
+    userData: PropTypes.object,
+    UserId: PropTypes.number.isRequired,
+  }),
+  messageId: PropTypes.number,
   text: PropTypes.string,
   user: PropTypes.shape({
     fullname: PropTypes.string,
+    id: PropTypes.number,
   }),
 };
 

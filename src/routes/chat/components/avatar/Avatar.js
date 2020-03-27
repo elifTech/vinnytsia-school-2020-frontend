@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import toUpper from 'lodash/toUpper';
+import isEmpty from 'lodash/isEmpty';
 
 import s from './Avatar.css';
 
@@ -16,7 +17,13 @@ function Avatar({ user }) {
       />
     );
   }
-  const firstChar = toUpper(`${user.fullname[0]}`);
+  if (!isEmpty(user.fullname)) {
+    const firstChar = toUpper(`${user.fullname[0]}`);
+    return <div className={s.symbol}>{firstChar}</div>;
+  }
+
+  const userNameSymbol = 'N';
+  const firstChar = toUpper(userNameSymbol);
   return <div className={s.symbol}>{firstChar}</div>;
 }
 
