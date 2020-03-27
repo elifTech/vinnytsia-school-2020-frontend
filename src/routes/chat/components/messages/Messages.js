@@ -45,7 +45,7 @@ Messages.propTypes = {
   chatRemoveMessage: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
-      attachments: PropTypes.string,
+      attachment: PropTypes.string,
       createdAt: PropTypes.string,
       id: PropTypes.number,
       text: PropTypes.string,

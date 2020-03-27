@@ -9,7 +9,6 @@ import CustomField from './CustomField';
 import style from './SuperheroesForm.css';
 
 function validate(values) {
-  console.info(values);
   const errors = {};
   if (!values.dc) {
     errors.dc = 'You should choose at least your least hated superhero';

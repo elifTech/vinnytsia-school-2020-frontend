@@ -12,6 +12,7 @@ import ImageAttachment from './components/ImageAttachment';
 import deleteicon from './assets/deleticon.svg';
 
 import s from './Message.css';
+import socket from '../../../../utils/socket';
 
 const testIsRead = true;
 
@@ -38,6 +39,7 @@ function Message({
   }
 
   const deleteMessage = useCallback(() => {
+    socket.emit('SERVER:REMOVE_MESSAGE', messageId);
     dispatch(chatRemoveMessage(messageId));
   }, [chatRemoveMessage, dispatch, messageId]);
   const setEditMessageDataToRedux = useCallback(() => {

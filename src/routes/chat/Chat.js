@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Messages from './components/messages';
 import ChatInput from './components/chatInput';
 import {
-  chatAddMessage,
+  createMessage,
   chatMessageIsTyping,
   fetchMessages,
   updateMessage,
@@ -32,27 +32,31 @@ function Chat() {
   const [isEditCondition, setInEditCondition] = useState(false);
   useEffect(() => {
     dispatch(fetchMessages());
-    if (isEditCondition) {
-      console.info('Add Listener message');
-      window.addEventListener('message', message);
-    }
     socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
+    return function removeCreateMessageListener() {
+      console.info('SERVER:NEW_MESSAGE');
+      socket.off('SERVER:NEW_MESSAGE');
+    };
   }, [dispatch, isEditCondition, message]);
   useEffect(() => {
     socket.on('SERVER:REMOVE_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
+    return function removeDeleteMessageListener() {
+      console.info('SERVER:REMOVE_MESSAGE');
+      socket.off('SERVER:REMOVE_MESSAGE');
+    };
   }, [dispatch]);
   useEffect(() => {
     socket.on('SERVER:UPDATE_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
-    if (!isEditCondition) {
-      console.info('removeEL message ');
-      window.removeEventListener('message', message);
-    }
+    return function removeUpdateMessageListener() {
+      console.info('SERVER:UPDATE_MESSAGE');
+      socket.off('SERVER:UPDATE_MESSAGE');
+    };
   }, [dispatch, isEditCondition, message, messageId]);
   const initialState = '';
   const [userInput, setUserInput] = useState(initialState);
@@ -77,7 +81,7 @@ function Chat() {
         text: userInput,
       };
       socket.emit('SERVER:NEW_MESSAGE', newMessage);
-      dispatch(chatAddMessage(newMessage));
+      dispatch(createMessage(newMessage));
       return setUserInput(initialState);
     },
     [dispatch, userInput],

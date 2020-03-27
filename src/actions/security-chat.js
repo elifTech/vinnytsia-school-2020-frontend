@@ -32,17 +32,12 @@ function fetchMessagesSuccess(items) {
     type: GET_ALL_MESSAGES,
   };
 }
-async function createMessage(newMessage) {
-  try {
-    const response = await fetch('http://localhost:8080/api/message', {
-      method: 'post',
-      body: JSON.stringify(newMessage),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    return await response.json();
-  } catch (error) {
-    return error;
-  }
+function chatAddMessage(newMessage) {
+  return {
+    message: newMessage,
+    isTyping: false,
+    type: CHAT_ADD_MESSAGE,
+  };
 }
 export function setCurrentMessage(messageId, text, item) {
   return {
@@ -52,30 +47,6 @@ export function setCurrentMessage(messageId, text, item) {
     type: EDIT_MESSAGE,
   };
 }
-export async function fetchMessageById(messageId) {
-  try {
-    const response = await fetch(
-      `http://localhost:8080/api/message/${messageId}`,
-      {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    return await response.json();
-  } catch (error) {
-    return error;
-  }
-}
-export function chatAddMessage(newMessage) {
-  createMessage(newMessage);
-  return {
-    message: newMessage,
-    isTyping: false,
-    type: CHAT_ADD_MESSAGE,
-  };
-}
 export function chatMessageIsTyping(boolean) {
   return {
     items: null,
@@ -83,7 +54,7 @@ export function chatMessageIsTyping(boolean) {
     type: CHAT_MESSAGE_IS_TYPING,
   };
 }
-export function chatRemoveMessage(messageId) {
+function chatRemoveMessage(messageId) {
   return {
     messageId,
     type: CHAT_REMOVE_MESSAGE,
@@ -95,6 +66,22 @@ export function setUpdatedMessage(messageId, updatedMessage) {
     message: updatedMessage,
     isTyping: false,
     type: CHAT_UPDATE_MESSAGE_BY_ID,
+  };
+}
+export function createMessage(newMessage) {
+  return async dispatch => {
+    dispatch(fetchDataStart());
+    try {
+      const response = await fetch('http://localhost:8080/api/message', {
+        method: 'post',
+        body: JSON.stringify(newMessage),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      await response.json();
+      return dispatch(chatAddMessage(newMessage));
+    } catch (error) {
+      return dispatch(fetchDataFailure(error));
+    }
   };
 }
 export function removeMessage(messageId) {
