@@ -1,70 +1,86 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import useStyles from 'isomorphic-style-loader/useStyles';
+import { Field, reduxForm } from 'redux-form';
+import CustomFieldLogin from './components/CustomFieldLogin/CustomFieldLogin';
 import s from './Login.css';
-import Input from './components/Input';
 import LoginButton from './components/LoginButton';
+import { login, registration } from '../../actions/login';
+
+const validate = value => {
+  const errors = {};
+  const minLengthPassword = 5;
+  if (!value.email) {
+    errors.email = 'Required';
+  } else if (value.email.length < minLengthPassword) {
+    errors.email = `Bro, not enough characters for a valid email`;
+  } else if (!value.email.match(/^[\d.a-z-]+@[\da-z-]{2,}.[a-z]{2,}$/i)) {
+    errors.email = 'Please, check your email, it looks invalid ';
+  }
+  if (!value.password) {
+    errors.password = 'Required';
+  } else if (value.password.length < minLengthPassword) {
+    errors.password = `Password must have at least 5 characters, you typed only ${value.password.length}`;
+  }
+
+  return errors;
+};
 
 function Login() {
+  const formLoginState = useSelector(state => state.form.Login);
+  const dispatch = useDispatch();
   useStyles(s);
-  const [inputValue, setInputValue] = useState({
-    password: '',
-    email: '',
-  });
-  const inputChangeHandler = useCallback(event => {
-    const { name } = event.target;
-    const { value } = event.target;
-    setInputValue(previous => {
-      return {
-        ...previous,
-        [name]: value,
-      };
-    });
-  }, []);
+
   const buttonLoginHandler = useCallback(
     event => {
       event.preventDefault();
       const { name } = event.target;
-      switch (name) {
-        case 'logIn':
-          console.info('What we do now? :', name);
-          console.info('What mail of user is? :', inputValue.email);
-          console.info('What password is? :', inputValue.password);
-          break;
-        case 'registration':
-          console.info('What we do now? :', name);
-          console.info('What mail of user is? :', inputValue.email);
-          console.info('What password is? :', inputValue.password);
-          break;
-        default:
-          console.info('something whent wrong');
+      if (name === 'login') {
+        return dispatch(login());
       }
+      if (name === 'registration') {
+        return dispatch(registration());
+      }
+      return true;
     },
-    [inputValue],
+    [dispatch],
   );
   return (
     <div className={s.containerLogin}>
+      {/* <a href="chat">chat</a> */}
       <h1 className={s.textLogin}>
         Want to be on safe? Please, log in or register
       </h1>
       <form className={s.formContainer}>
-        <Input
-          inputChangeHandler={inputChangeHandler}
+        <Field
+          component={CustomFieldLogin}
+          label="Email "
           name="email"
-          value={inputValue.email}
+          type="text"
         />
-        <Input
-          inputChangeHandler={inputChangeHandler}
+        <Field
+          component={CustomFieldLogin}
+          label="Password"
           name="password"
-          value={inputValue.password}
+          type="password"
         />
-        <LoginButton buttonLoginHandler={buttonLoginHandler} name="logIn" />
         <LoginButton
           buttonLoginHandler={buttonLoginHandler}
+          hasError={!!formLoginState.syncErrors}
+          name="login"
+        />
+        <LoginButton
+          buttonLoginHandler={buttonLoginHandler}
+          hasError={!!formLoginState.syncErrors}
           name="registration"
         />
       </form>
     </div>
   );
 }
+
 Login.whyDidYouRender = true;
-export default memo(Login);
+export default reduxForm({
+  form: 'Login',
+  validate,
+})(Login);
