@@ -1,18 +1,30 @@
 import invoke from 'lodash/invoke';
 import nth from 'lodash/nth';
+// import cookie from 'isomorphic-cookie';
 
 const routes = [
   {
     action({ next }) {
       return next();
     },
-    children: [],
+    children: [
+      {
+        load: () => import('./login'),
+        path: '/login',
+      },
+    ],
     path: '',
   },
   {
     async action({ next }) {
       // Execute each child route until one of them return the result
       const route = await next();
+      if (
+        // !cookie.load('token')
+        false // at this time false!!!
+      ) {
+        route.redirect = '/login';
+      }
 
       // Provide default values for title, description etc.
       route.title = `${route.title || 'Untitled Page'}`;

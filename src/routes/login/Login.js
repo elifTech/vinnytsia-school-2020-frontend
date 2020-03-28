@@ -28,6 +28,7 @@ const validate = value => {
 
 function Login() {
   const formLoginState = useSelector(state => state.form.Login);
+  const formLoginValue = useSelector(state => state.form.Login.values);
   const dispatch = useDispatch();
   useStyles(s);
 
@@ -36,14 +37,14 @@ function Login() {
       event.preventDefault();
       const { name } = event.target;
       if (name === 'login') {
-        return dispatch(login());
+        return dispatch(login(formLoginValue));
       }
       if (name === 'registration') {
         return dispatch(registration());
       }
       return true;
     },
-    [dispatch],
+    [dispatch, formLoginValue],
   );
   return (
     <div className={s.containerLogin}>

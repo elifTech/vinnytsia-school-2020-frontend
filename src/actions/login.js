@@ -1,3 +1,4 @@
+import cookie from 'isomorphic-cookie';
 import {
   LOGIN_START,
   LOGIN_SUCCESS,
@@ -5,14 +6,20 @@ import {
   REGISTRATION_START,
   REGISTRATION_SUCCESS,
   REGISTRATION_FAILURE,
+  apiURL,
 } from '../constants';
+import fetchAsync from '../utils/fetch';
 
+const maxAge = 604800; // a week
 export function loginStart() {
   return {
     type: LOGIN_START,
   };
 }
-export function loginSuccess() {
+export function loginSuccess(data) {
+  cookie.save('token', data.token, {
+    maxAge,
+  });
   return {
     type: LOGIN_SUCCESS,
   };
@@ -23,12 +30,15 @@ export function loginFailure() {
     type: LOGIN_FAILURE,
   };
 }
-export function login() {
-  return dispatch => {
+export function login(loginValue) {
+  return async dispatch => {
     dispatch(loginStart());
     try {
-      // fetcing to server
-      return dispatch(loginSuccess());
+      const data = await fetchAsync(`${apiURL}/auth`, 'POST', loginValue);
+      if (!data.token) {
+        return dispatch(loginFailure());
+      }
+      return dispatch(loginSuccess(data));
     } catch (error) {
       return dispatch(loginFailure());
     }
