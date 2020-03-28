@@ -31,13 +31,13 @@ const routes = [
         path: '/login',
       },
       {
+        load: () => import(/* webpackChunkName: 'chat' */ './chat'),
+        path: '/chat',
+      },
+      {
         load: () =>
           import(/* webpackChunkName: 'online-status' */ './online-status'),
         path: '/online-status',
-      },
-      {
-        load: () => import(/* webpackChunkName: 'chat' */ './chat'),
-        path: '/chat',
       },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
