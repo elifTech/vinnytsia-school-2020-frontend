@@ -1,0 +1,17 @@
+.Info {
+  background: #ccc;
+  margin-left: 20px;
+  border-radius: 5px;
+  overflow: hidden;
+  height: max-content;
+}
+
+.InfoTitle {
+  padding: 10px 15px;
+  background: #009688;
+}
+
+.InfoContent {
+  text-align: left;
+  padding: 10px 20px;
+}
