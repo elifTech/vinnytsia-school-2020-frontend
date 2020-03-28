@@ -2,16 +2,18 @@ import React, { memo, useState, useCallback, useEffect } from 'react';
 import get from 'lodash/get';
 import property from 'lodash/property';
 import isEmpty from 'lodash/isEmpty';
-// import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Messages from './components/messages';
 import ChatInput from './components/chatInput';
 import {
-  chatAddMessage,
+  createMessage,
   chatMessageIsTyping,
   fetchMessages,
+  updateMessage,
+  setCurrentMessage,
+  removeMessage,
 } from '../../actions/security-chat';
 import socket from '../../utils/socket';
 // Without api need to use testData instead messages in <Messages> component
@@ -19,20 +21,49 @@ import socket from '../../utils/socket';
 
 import s from './Chat.css';
 
-const testUserId = '1';
+const testUserId = 1;
 
 function Chat() {
   useStyles(s);
   const dispatch = useDispatch();
   const messages = useSelector(property('chat.messages'));
+  const message = useSelector(property('chat.message'));
+  const messageId = useSelector(property('chat.messageId'));
+  const [isEditCondition, setInEditCondition] = useState(false);
   useEffect(() => {
     dispatch(fetchMessages());
     socket.on('SERVER:NEW_MESSAGE', function reloadMessagesList() {
       dispatch(fetchMessages());
     });
+    return function removeCreateMessageListener() {
+      console.info('SERVER:NEW_MESSAGE');
+      socket.off('SERVER:NEW_MESSAGE');
+    };
+  }, [dispatch, isEditCondition, message]);
+  useEffect(() => {
+    socket.on('SERVER:REMOVE_MESSAGE', function reloadMessagesList() {
+      dispatch(fetchMessages());
+    });
+    return function removeDeleteMessageListener() {
+      console.info('SERVER:REMOVE_MESSAGE');
+      socket.off('SERVER:REMOVE_MESSAGE');
+    };
   }, [dispatch]);
+  useEffect(() => {
+    socket.on('SERVER:UPDATE_MESSAGE', function reloadMessagesList() {
+      dispatch(fetchMessages());
+    });
+    return function removeUpdateMessageListener() {
+      console.info('SERVER:UPDATE_MESSAGE');
+      socket.off('SERVER:UPDATE_MESSAGE');
+    };
+  }, [dispatch, isEditCondition, message, messageId]);
   const initialState = '';
   const [userInput, setUserInput] = useState(initialState);
+  // const [isEditCondition, setInEditCondition] = useState(false);
+  const changeInputToEdit = useCallback(() => {
+    setInEditCondition(true);
+  }, []);
   const handleChange = useCallback(
     event => {
       socket.emit('CHAT:TYPING', testUserId);
@@ -46,14 +77,30 @@ function Chat() {
     event => {
       event.preventDefault();
       const newMessage = {
-        user: testUserId,
+        UserId: testUserId,
         text: userInput,
       };
       socket.emit('SERVER:NEW_MESSAGE', newMessage);
-      dispatch(chatAddMessage(newMessage));
+      dispatch(createMessage(newMessage));
       return setUserInput(initialState);
     },
     [dispatch, userInput],
+  );
+  const updateUserMessage = useCallback(
+    event => {
+      event.preventDefault();
+      const oldMessage = message;
+      const updatedMessage = {
+        ...oldMessage,
+        text: userInput,
+      };
+      socket.emit('SERVER:UPDATE_MESSAGE', updatedMessage);
+      dispatch(updateMessage(messageId, updatedMessage));
+      setInEditCondition(false);
+      setCurrentMessage(null, '');
+      return setUserInput(initialState);
+    },
+    [dispatch, message, messageId, userInput],
   );
   return (
     <div className={s.chatContainer}>
@@ -62,15 +109,22 @@ function Chat() {
         <div className={s.messagesContent}>
           <div className={s.messages}>
             {isEmpty(messages) ? (
-              <span>LOADING</span>
+              <span>No messages</span>
             ) : (
-              <Messages items={messages} />
+              <Messages
+                changeInputToEdit={changeInputToEdit}
+                chatRemoveMessage={removeMessage}
+                items={messages}
+              />
             )}
           </div>
         </div>
         <ChatInput
           handleChange={handleChange}
+          isEditCondition={isEditCondition}
           sendUserMessage={sendUserMessage}
+          setUserInput={setUserInput}
+          updateUserMessage={updateUserMessage}
           userInput={userInput}
         />
       </div>

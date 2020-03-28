@@ -1,17 +1,21 @@
 import { render } from 'enzyme';
 import React from 'react';
+import { Provider as ReduxProvider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import Dashboard from './Dashboard';
 
-jest.mock('react-redux', () => ({
-  useDispatch: () => jest.fn(),
-  useSelector: jest.fn(),
-}));
+const mockStore = configureStore([]);
 
 describe('dashboard route', () => {
   it('matches the snapshot', () => {
     expect.assertions(1);
-    const link = render(<Dashboard />);
-    expect(link).toMatchInlineSnapshot(`
+    const store = mockStore({});
+    const dashboard = render(
+      <ReduxProvider store={store}>
+        <Dashboard />
+      </ReduxProvider>,
+    );
+    expect(dashboard).toMatchInlineSnapshot(`
       <div
         class="root"
       >
@@ -20,32 +24,39 @@ describe('dashboard route', () => {
         >
           Smart Security Dashboard
         </div>
-        <p>
+        <form
+          class="root"
+        >
           <label
-            for="number-of-rows"
+            class="form-group"
+            for="dc"
           >
-            Number of rows: 
+            Your favourite DC superhero
             <input
-              id="number-of-rows"
-              type="number"
-              value="0"
+              class="form-control form-control"
+              name="dc"
+              type="text"
             />
           </label>
           <label
-            for="number-of-columns"
+            class="form-group"
+            for="marvel"
           >
-            Number of columns: 
+            Your favourite Marvel superhero
             <input
-              id="number-of-columns"
-              type="number"
-              value="0"
+              class="form-control"
+              name="marvel"
+              type="text"
             />
           </label>
-        </p>
-        <p>
-          0
-        </p>
-        <p />
+          <button
+            class="btn btn-primary"
+            type="submit"
+          >
+            Submit
+          </button>
+        </form>
+        <pre />
       </div>
     `);
   });
