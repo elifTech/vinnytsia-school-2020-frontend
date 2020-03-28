@@ -2,7 +2,6 @@ import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import property from 'lodash/property';
 import map from 'lodash/map';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
 import s from './HomeView.css';
@@ -16,7 +15,7 @@ function HomeView(props) {
   const { title } = props;
   const dispatch = useDispatch();
   const windowSensorsData = useSelector(
-    property('wSensors.fetchedWindowSensors'),
+    property('windowSensors.fetchedWindowSensors'),
     shallowEqual,
   );
 
@@ -36,8 +35,8 @@ function HomeView(props) {
 
   return (
     <div>
-      <h2 className={classNames('text-center', 'mb-4')}>{title}</h2>
-      <div className={classNames(s.homeView)}>
+      <h2 className="text-center mb-4">{title}</h2>
+      <div className={s.homeView}>
         <div className={s.planContainer}>
           {windowSensors}
           <img alt="house plan" className={s.housePlanImg} src={HousePlanImg} />

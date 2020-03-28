@@ -1,15 +1,15 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import WindowProtection from './WindowProtection';
+import WindowsProtection from './WindowsProtection';
 
-const title = 'Window protection';
+const title = 'Windows protection';
 
 export default function action() {
   return {
     chunks: ['windows-protection'],
     component: (
       <Layout>
-        <WindowProtection title={title} />
+        <WindowsProtection title={title} />
       </Layout>
     ),
     title,

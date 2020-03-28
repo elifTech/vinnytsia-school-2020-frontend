@@ -4,7 +4,7 @@ import HomeView from './components/HomeView';
 import Windows from './components/Windows';
 import NavBar from './components/NavBar';
 
-function WindowProtection(props) {
+function WindowsProtection(props) {
   const { title } = props;
   // I will rewrite when I finish the NavBar component
   return (
@@ -15,8 +15,8 @@ function WindowProtection(props) {
     </div>
   );
 }
-WindowProtection.propTypes = {
+WindowsProtection.propTypes = {
   title: PropTypes.string.isRequired,
 };
-WindowProtection.whyDidYouRender = true;
-export default memo(WindowProtection);
+WindowsProtection.whyDidYouRender = true;
+export default memo(WindowsProtection);

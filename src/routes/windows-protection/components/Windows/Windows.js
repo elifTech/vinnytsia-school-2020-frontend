@@ -14,10 +14,13 @@ function Windows(props) {
   const { title } = props;
   const dispatch = useDispatch();
   const windowData = useSelector(
-    property('wSensors.fetchedWindowData'),
+    property('windowSensors.fetchedWindowData'),
     shallowEqual,
   );
-  const isLoading = useSelector(property('wSensors.isLoading'), shallowEqual);
+  const isLoading = useSelector(
+    property('windowSensors.isLoading'),
+    shallowEqual,
+  );
   useEffect(() => {
     dispatch(fetchWindowData());
   }, [dispatch]);

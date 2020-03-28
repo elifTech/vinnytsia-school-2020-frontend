@@ -5,7 +5,7 @@ import {
   FETCH_WINDOW_SENSORS_SUCCESS,
 } from '../constants';
 
-export default function wSensors(
+export default function windowSensors(
   state = { fetchedWindowData: [], fetchedWindowSensors: [] },
   action,
 ) {

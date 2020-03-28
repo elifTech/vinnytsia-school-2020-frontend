@@ -1,35 +1,49 @@
 import React, { memo, useState, useCallback } from 'react';
-import Draggeble from 'react-draggable';
+import Draggable from 'react-draggable';
 import PropTypes from 'prop-types';
 import useStyles from 'isomorphic-style-loader/useStyles';
+import get from 'lodash/get';
 import classNames from 'classnames';
 import toUpper from 'lodash/toUpper';
 import s from './WindowSensor.css';
 import openCloseSensorIcon from '../Images/open-close-sensor.svg';
 import breakSensorIcon from '../Images/break-sensor.svg';
 
-const sensorOptions = new Map();
-sensorOptions.set('ok', {
-  sensorIconClass: s.iconOk,
-  sensorInfoClass: 'bg-success',
-});
-sensorOptions.set('alarm', {
-  sensorIconClass: s.iconAlert,
-  sensorInfoClass: 'bg-danger',
-});
-sensorOptions.set('warning', {
-  sensorIconClass: s.iconWarning,
-  sensorInfoClass: 'bg-warning',
-});
-sensorOptions.set('inactive', {
-  sensorIconClass: s.iconInactive,
-  sensorInfoClass: 'bg-light',
-});
+const sensorOptions = new Map([
+  [
+    'ok',
+    {
+      sensorIconClass: s.iconOk,
+      sensorInfoClass: 'bg-success',
+    },
+  ],
+  [
+    'alarm',
+    {
+      sensorIconClass: s.iconAlert,
+      sensorInfoClass: 'bg-danger',
+    },
+  ],
+  [
+    'warning',
+    {
+      sensorIconClass: s.iconWarning,
+      sensorInfoClass: 'bg-warning',
+    },
+  ],
+  [
+    'inactive',
+    {
+      sensorIconClass: s.iconInactive,
+      sensorInfoClass: 'bg-light',
+    },
+  ],
+]);
 
 function WindowSensor(props) {
   useStyles(s);
   const { sensorData, isEditingMode } = props;
-  const [hover, setHover] = useState(false);
+  const [isHover, setHover] = useState(false);
 
   const options = { ...sensorOptions.get(sensorData.status) };
   options.position = {
@@ -43,11 +57,11 @@ function WindowSensor(props) {
   }
 
   const toggleHoverHandler = useCallback(() => {
-    setHover(!hover);
-  }, [hover]);
+    setHover(oldHover => !oldHover);
+  }, []);
 
   return (
-    <Draggeble
+    <Draggable
       bounds="parent"
       disabled={!isEditingMode}
       position={options.position}
@@ -62,12 +76,15 @@ function WindowSensor(props) {
           className={classNames(s.sensorIcon, options.sensorIconClass)}
           src={options.sensorIcon}
         />
-        {hover && !isEditingMode && (
+        {!isEditingMode && (
           <div
             className={classNames(
               'card',
               options.sensorInfoClass,
               s.sensorInfo,
+              {
+                [s.sensorInfoHover]: isHover,
+              },
             )}
           >
             <div className="card-header">{`${sensorData.type} sensor on ${sensorData.window.name}`}</div>
@@ -82,13 +99,16 @@ function WindowSensor(props) {
               {sensorData.lastAlartDate && (
                 <li className="list-group-item">{`Last alart date: ${sensorData.lastAlartDate}`}</li>
               )}
-              <li className="list-group-item">{`Zone: ${sensorData.window.zone.name}`}</li>
+              <li className="list-group-item">{`Zone: ${get(
+                sensorData,
+                'window.zone.name',
+              )}`}</li>
               <li className="list-group-item">{`Battery capasity: ${sensorData.batteryCharge}%`}</li>
             </ul>
           </div>
         )}
       </div>
-    </Draggeble>
+    </Draggable>
   );
 }
 WindowSensor.propTypes = {

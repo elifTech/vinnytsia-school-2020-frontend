@@ -8,29 +8,44 @@ import windowClosedIcon from './Images/w-closed.png';
 import windowBrokenIcon from './Images/w-broken.png';
 import windowInactiveIcon from './Images/w-inactive.png';
 
-const windowOptionsSet = new Map();
-windowOptionsSet.set('closed', {
-  windowIcon: windowClosedIcon,
-  cardBodyClass: '',
-});
-windowOptionsSet.set('open', {
-  windowIcon: windowOpenIcon,
-  cardBodyClass: 'text-success',
-});
-windowOptionsSet.set('broken', {
-  windowIcon: windowBrokenIcon,
-  cardBodyClass: 'text-danger',
-});
-windowOptionsSet.set('hacked', {
-  windowIcon: windowBrokenIcon,
-  cardBodyClass: 'text-danger',
-});
-windowOptionsSet.set('inactive', {
-  windowIcon: windowInactiveIcon,
-  cardBodyClass: 'text-secondary',
-  msg: 'Check the sensors on the map',
-});
-
+const windowOptionsSet = new Map([
+  [
+    'closed',
+    {
+      windowIcon: windowClosedIcon,
+      cardBodyClass: '',
+    },
+  ],
+  [
+    'open',
+    {
+      windowIcon: windowOpenIcon,
+      cardBodyClass: 'text-success',
+    },
+  ],
+  [
+    'broken',
+    {
+      windowIcon: windowBrokenIcon,
+      cardBodyClass: 'text-danger',
+    },
+  ],
+  [
+    'hacked',
+    {
+      windowIcon: windowBrokenIcon,
+      cardBodyClass: 'text-danger',
+    },
+  ],
+  [
+    'inactive',
+    {
+      windowIcon: windowInactiveIcon,
+      cardBodyClass: 'text-secondary',
+      msg: 'Check the sensors on the map',
+    },
+  ],
+]);
 function WindowItem(props) {
   useStyles(s);
   const { windowInfo } = props;
@@ -63,7 +78,7 @@ function WindowItem(props) {
             </p>
           )}
           {windowOptions.msg && (
-            <p className={classNames(s.cardText)}>{windowOptions.msg}</p>
+            <p className={s.cardText}>{windowOptions.msg}</p>
           )}
         </div>
       </div>
