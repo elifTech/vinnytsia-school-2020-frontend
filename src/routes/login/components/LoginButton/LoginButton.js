@@ -4,7 +4,12 @@ import capitalize from 'lodash/capitalize';
 
 export default function LoginButton({ name, buttonLoginHandler }) {
   return (
-    <button name={name} onClick={buttonLoginHandler} type="submit">
+    <button
+      className="btn btn-primary"
+      name={name}
+      onClick={buttonLoginHandler}
+      type="submit"
+    >
       {capitalize(name)}
     </button>
   );

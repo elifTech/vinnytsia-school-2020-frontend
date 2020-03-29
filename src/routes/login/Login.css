@@ -28,22 +28,13 @@
 }
 
 .formContainer button {
-  border: none;
-  border-radius: 5px;
-  height: 25px;
-  background: #eee;
-  margin-right: 10px;
-  outline: none;
   width: 50%;
   align-self: center;
 }
 
-.formContainer button:hover {
-  cursor: pointer;
-}
-
 .textLogin {
   color: #cecece;
+  margin-top: 15px;
   display: flex;
   width: 100%;
   justify-content: center;
