@@ -1,0 +1,47 @@
+@import '../../components/variables.css';
+
+.container {
+  background: #efefef;
+  min-height: 100vh;
+}
+
+.title {
+  background: #009688;
+  text-align: center;
+  padding: 10px 20px;
+}
+
+.content {
+  width: 100%;
+  margin: 20px auto;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+}
+
+.mainContent {
+  padding: 10px 20px;
+  overflow: hidden;
+  border-radius: 5px;
+  width: 1000px;
+  min-width: fit-content;
+  height: max-content;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+}
+
+.planWrapper {
+  margin: 0 auto;
+  width: max-content;
+  height: 100%;
+  border-radius: 2px;
+  position: relative;
+}
+
+.imgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}

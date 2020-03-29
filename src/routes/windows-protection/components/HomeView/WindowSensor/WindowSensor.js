@@ -87,7 +87,10 @@ function WindowSensor(props) {
               },
             )}
           >
-            <div className="card-header">{`${sensorData.type} sensor on ${sensorData.window.name}`}</div>
+            <div className="card-header">{`${sensorData.type} sensor on ${get(
+              sensorData,
+              'window.name',
+            )}`}</div>
             <ul className="list-group list-group-flush">
               <li className="list-group-item">
                 {`Status:  `}

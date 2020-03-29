@@ -3,7 +3,8 @@
     "id": "35ce83ca80a9906817c95cbe0",
     "text": "Santa: Ea deserunt exercitation sit irure aliqua ea.",
     "created_at": "2020-03-15 16:27:44.094+02",
-    "user": {
+    "UserId": 2,
+    "userData": {
       "id": "35",
       "fullname": "Stafford Whitley",
       "avatar": null
@@ -13,7 +14,8 @@
     "id": "35ce83ca89d0fdae4548a8aaa",
     "text": "Santa: Ea deserunt exercitation sit irure aliqua ea.",
     "created_at": "2020-03-15 16:27:44.094+02",
-    "user": {
+    "UserId": 1,
+    "userData": {
       "id": "35",
       "fullname": "Stafford Whitley",
       "avatar": null
@@ -23,7 +25,8 @@
     "id": "35ce83ca80a9906817c95cbe1",
     "text": "Santa: Ea deserunt exercitation sit irure aliqua ea.",
     "created_at": "2020-03-15 16:27:44.094+02",
-    "user": {
+    "UserId": 2,
+    "userData": {
       "id": "30",
       "fullname": "Stafford Whitley",
       "avatar": null
@@ -33,7 +36,8 @@
     "id": "25ce83ca8e64e10b218c412b1",
     "text": "Duis ad nulla in commodo adipisicing aliqua consequat ex anim quis.",
     "created_at": "2020-03-15 16:27:44.094+02",
-    "user": {
+    "UserId": 1,
+    "userData": {
       "id": "30",
       "fullname": "Haley Norman",
       "avatar": null
