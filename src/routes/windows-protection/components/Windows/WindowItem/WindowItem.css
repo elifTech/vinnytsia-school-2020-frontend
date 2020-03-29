@@ -1,0 +1,56 @@
+.sensorCard {
+  width: 300px;
+  flex: none !important;
+}
+
+.windowImage {
+  max-width: 80%;
+  width: 200px;
+  height: auto;
+  align-self: center;
+  margin-top: 5px;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardText {
+  margin: 0;
+}
+
+@media screen and (max-width: 690px) {
+  .sensorCard {
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 200px;
+  }
+
+  .windowImage {
+    width: 60%;
+    height: auto;
+    align-self: center;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .cardBody {
+    padding: 10px;
+  }
+
+  .sensorCard {
+    width: 130px;
+  }
+
+  .cardTitle {
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+  .cardText {
+    font-size: 12px;
+  }
+}

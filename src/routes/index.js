@@ -46,6 +46,13 @@ const routes = [
           import(/* webpackChunkName: 'online-status' */ './online-status'),
         path: '/online-status',
       },
+      {
+        load: () =>
+          import(
+            /* webpackChunkName: 'windows-protection' */ './windows-protection'
+          ),
+        path: '/windows-protection',
+      },
       // Wildcard routes, e.g. { path: '(.*)', ... } (must go last)
       {
         load: () => import(/* webpackChunkName: 'not-found' */ './not-found'),

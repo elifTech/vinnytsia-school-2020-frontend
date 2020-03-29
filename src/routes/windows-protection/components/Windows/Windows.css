@@ -1,0 +1,7 @@
+@media screen and (max-width: 576px) {
+  .cardDeck {
+    display: flex;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+  }
+}

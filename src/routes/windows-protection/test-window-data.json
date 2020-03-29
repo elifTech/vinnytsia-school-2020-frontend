@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Window 1",
+    "zone": "Kitchen",
+    "status": "broken",
+    "accidentDate": "11.10.2015 10:10"
+  },
+  {
+    "id": 2,
+    "name": "Window 2",
+    "zone": "Kitchen",
+    "status": "hacked",
+    "accidentDate": "11.10.2015 10:10"
+  },
+  {
+    "id": 3,
+    "name": "Window 3",
+    "zone": "Bathroom",
+    "status": "open",
+    "accidentDate": null
+  },
+  {
+    "id": 4,
+    "name": "Window 4",
+    "zone": "Livingroom",
+    "status": "closed",
+    "accidentDate": null
+  },
+  {
+    "id": 5,
+    "name": "Window 5",
+    "zone": "Livingroom",
+    "status": "inactive",
+    "accidentDate": "11.10.2015 10:10"
+  }
+]

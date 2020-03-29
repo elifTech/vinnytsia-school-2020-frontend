@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "sensorId": "Sensor1",
+    "isOpen": false,
+    "isActive": false,
+    "msg": "Battery low, time to install a new battery!",
+    "status": "warning",
+    "batteryCharge": 9,
+    "type": "glass break",
+    "lastAlarmDate": "11.10.2015 10:10",
+    "xCoord": 70,
+    "yCoord": 120,
+    "window": {
+      "id": 1,
+      "name": "window1",
+      "zone": {
+        "id": 1,
+        "name": "kitchen"
+      }
+    }
+  },
+  {
+    "id": 2,
+    "sensorId": "Sensor2",
+    "isActive": false,
+    "isOpen": false,
+    "msg": "The window is broken and communication with the sensor is lost",
+    "status": "alarm",
+    "type": "glass break",
+    "batteryCharge": 100,
+    "lastAlarmDate": "11.10.2015 10:10",
+    "xCoord": 70,
+    "yCoord": 500,
+    "window": {
+      "id": 2,
+      "name": "window2",
+      "zone": {
+        "id": 2,
+        "name": "bedroom"
+      }
+    }
+  },
+  {
+    "id": 3,
+    "sensorId": "Sensor3",
+    "isOpen": true,
+    "isActive": true,
+    "msg": "The window is open",
+    "status": "warning",
+    "type": "open/close",
+    "batteryCharge": 100,
+    "lastAlarmDate": null,
+    "xCoord": 600,
+    "yCoord": 50,
+    "window": {
+      "id": 3,
+      "name": "window3",
+      "zone": {
+        "id": 3,
+        "name": "bedroom"
+      }
+    }
+  },
+  {
+    "id": 4,
+    "sensorId": "Sensor4",
+    "isOpen": false,
+    "isActive": true,
+    "msg": "",
+    "status": "ok",
+    "type": "glass break",
+    "batteryCharge": 100,
+    "lastAlarmDate": null,
+    "xCoord": 560,
+    "yCoord": 50,
+    "window": {
+      "id": 4,
+      "name": "window3",
+      "zone": {
+        "id": 3,
+        "name": "bedroom"
+      }
+    }
+  },
+  {
+    "id": 5,
+    "sensorId": "Sensor5",
+    "isOpen": false,
+    "isActive": false,
+    "msg": "Connection with the sensor is lost",
+    "status": "inactive",
+    "type": "open/close",
+    "batteryCharge": 0,
+    "lastAlarmDate": null,
+    "xCoord": 200,
+    "yCoord": 120,
+    "window": {
+      "id": 3,
+      "name": "window3",
+      "zone": {
+        "id": 3,
+        "name": "bedroom"
+      }
+    }
+  }
+]
