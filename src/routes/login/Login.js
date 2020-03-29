@@ -4,8 +4,9 @@ import useStyles from 'isomorphic-style-loader/useStyles';
 import { Field, reduxForm } from 'redux-form';
 import CustomFieldLogin from './components/CustomFieldLogin/CustomFieldLogin';
 import s from './Login.css';
-import LoginButton from './components/LoginButton';
-import { login, registration } from '../../actions/login';
+import LoginButton from './components/LoginButton/LoginButton';
+import { login, registration, alertCreator } from '../../actions/login';
+import Alert from './components/Alert/Alert';
 
 const validate = value => {
   const errors = {};
@@ -29,30 +30,34 @@ const validate = value => {
 function Login() {
   const formLoginState = useSelector(state => state.form.Login);
   const formLoginValue = useSelector(state => state.form.Login.values);
+  const loginState = useSelector(state => state.login);
   const dispatch = useDispatch();
   useStyles(s);
-
   const buttonLoginHandler = useCallback(
     event => {
       event.preventDefault();
       const { name } = event.target;
+      if (formLoginState.syncErrors) {
+        return dispatch(alertCreator('Fields valuse are invalid'));
+      }
       if (name === 'login') {
         return dispatch(login(formLoginValue));
       }
       if (name === 'registration') {
-        return dispatch(registration());
+        return dispatch(registration(formLoginValue));
       }
       return true;
     },
     [dispatch, formLoginValue],
   );
+  // console.info(formLoginState);
   return (
     <div className={s.containerLogin}>
-      {/* <a href="chat">chat</a> */}
       <h1 className={s.textLogin}>
         Want to be on safe? Please, log in or register
       </h1>
       <form className={s.formContainer}>
+        {loginState.alert && <Alert message={loginState.alert} />}
         <Field
           component={CustomFieldLogin}
           label="Email "
@@ -67,12 +72,12 @@ function Login() {
         />
         <LoginButton
           buttonLoginHandler={buttonLoginHandler}
-          hasError={!!formLoginState.syncErrors}
+          // hasError={true}
           name="login"
         />
         <LoginButton
           buttonLoginHandler={buttonLoginHandler}
-          hasError={!!formLoginState.syncErrors}
+          // hasError={false}
           name="registration"
         />
       </form>

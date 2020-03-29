@@ -1,4 +1,3 @@
-import cookie from 'isomorphic-cookie';
 import {
   LOGIN_START,
   LOGIN_SUCCESS,
@@ -7,40 +6,71 @@ import {
   REGISTRATION_SUCCESS,
   REGISTRATION_FAILURE,
   apiURL,
+  ALERT_SHOW,
+  ALERT_HIDE,
 } from '../constants';
 import fetchAsync from '../utils/fetch';
+import createExpiresCookie from '../utils/create-expires-cookie';
 
-const maxAge = 604800; // a week
+const cookie = require('isomorphic-cookie');
+
+const minutesOfCookieLive = 60;
 export function loginStart() {
   return {
     type: LOGIN_START,
   };
 }
 export function loginSuccess(data) {
-  cookie.save('token', data.token, {
-    maxAge,
+  cookie.save('token', data.data.token, {
+    expires: createExpiresCookie(minutesOfCookieLive),
+    secure: false,
   });
   return {
     type: LOGIN_SUCCESS,
+    data,
+  };
+}
+export function alertShow(text) {
+  return {
+    type: ALERT_SHOW,
+    text,
+  };
+}
+export function alertHide() {
+  return {
+    type: ALERT_HIDE,
+  };
+}
+export function alertCreator(text) {
+  const millisecondsToAlertDisapear = 3000;
+  return dispatch => {
+    dispatch(alertShow(text));
+    setTimeout(() => {
+      dispatch(alertHide());
+    }, millisecondsToAlertDisapear);
   };
 }
 
-export function loginFailure() {
+export function loginFailure(data) {
   return {
     type: LOGIN_FAILURE,
+    data,
   };
 }
 export function login(loginValue) {
   return async dispatch => {
     dispatch(loginStart());
     try {
-      const data = await fetchAsync(`${apiURL}/auth`, 'POST', loginValue);
-      if (!data.token) {
-        return dispatch(loginFailure());
+      const payload = await fetchAsync(`${apiURL}/login`, 'POST', loginValue);
+      if (!payload.data) {
+        dispatch(alertCreator(payload.message));
+        return dispatch(loginFailure(payload));
       }
-      return dispatch(loginSuccess(data));
+      dispatch(alertCreator(payload.message));
+      return dispatch(loginSuccess(payload));
     } catch (error) {
-      return dispatch(loginFailure());
+      dispatch(alertCreator('Wow, some error appear'));
+      return dispatch(loginFailure(error));
     }
   };
 }
@@ -50,26 +80,42 @@ export function registrationStart() {
     type: REGISTRATION_START,
   };
 }
-export function registrationSuccess() {
+export function registrationSuccess(data) {
+  cookie.save('token', data.data.token, {
+    expires: createExpiresCookie(minutesOfCookieLive),
+    secure: false,
+  });
   return {
     type: REGISTRATION_SUCCESS,
+    data,
   };
 }
 
-export function registrationFailure() {
+export function registrationFailure(data) {
   return {
     type: REGISTRATION_FAILURE,
+    data,
   };
 }
 
-export function registration() {
-  return dispatch => {
+export function registration(regitrationValue) {
+  return async dispatch => {
     dispatch(registrationStart());
     try {
-      // fetching registration
-      return dispatch(registrationSuccess());
+      const payload = await fetchAsync(
+        `${apiURL}/registration`,
+        'POST',
+        regitrationValue,
+      );
+      if (!payload.data) {
+        dispatch(alertCreator(payload.message));
+        return dispatch(registrationFailure(payload));
+      }
+      dispatch(alertCreator(payload.message));
+      return dispatch(registrationSuccess(payload));
     } catch (error) {
-      return dispatch(registrationFailure());
+      dispatch(alertCreator('Wow, some error appear'));
+      return dispatch(registrationFailure(error));
     }
   };
 }

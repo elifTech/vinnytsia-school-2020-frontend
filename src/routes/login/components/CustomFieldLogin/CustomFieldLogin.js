@@ -6,7 +6,6 @@ import s from './CustomFieldLogin.css';
 export default function CustomFieldLogin({
   input: { name, onBlur, onChange, onDragStart, onDrop, onFocus },
   label,
-  //   name,
   type,
   meta: { touched, error },
 }) {
@@ -45,7 +44,7 @@ CustomFieldLogin.propTypes = {
   }).isRequired,
   label: PropTypes.string,
   meta: PropTypes.shape({
-    error: PropTypes.string.isRequired,
+    error: PropTypes.string,
     touched: PropTypes.bool.isRequired,
   }).isRequired,
   type: PropTypes.string,
