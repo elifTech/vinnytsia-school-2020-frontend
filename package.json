@@ -116,7 +116,7 @@
     "null-loader": "~3.0.0",
     "pixrem": "~5.0.0",
     "pleeease-filters": "~4.0.0",
-    "postcss": "~7.0.27",
+    "postcss": "~7.0.36",
     "postcss-calc": "~7.0.2",
     "postcss-csso": "~4.0.0",
     "postcss-flexbugs-fixes": "~4.2.0",
